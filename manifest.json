@@ -1,0 +1,29 @@
+{
+    "manifest_version": 3,
+    "name": "AgeVerif bypass",
+    "version": "1.3",
+    "description": "Skips the ageverif.net screen! Upload any photo and ID and the site will let you through.",
+    "browser_specific_settings": {
+        "gecko": {
+          "id": "helloyanis@ageverif-bypass",
+            "data_collection_permissions": {
+                "required": ["none"]
+            }
+        }
+    },
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "webRequestFilterResponse",
+        "storage"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "action": {
+        "default_icon": "icon.svg"
+    }
+}
