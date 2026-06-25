@@ -6,7 +6,8 @@
 
 # Supported services
 
-- [AgeChecker](https://agechecker.net/demo)
+- [AgeChecker.net](https://agechecker.net/demo)
+- [AgeVerif.com](https://demo.ageverif.com/) (**NOT** for the oAuth2 flow)
 
 # Why do you do this?
 
@@ -20,4 +21,4 @@ Also, it is technically almost never doable. This add-on is less than 10kb and c
 
 This extension will, on any website (hence why the "All URLs" permission is needed) look for calls that will create the ageverif.net popup, and instead of letting the request through, will rewrite its own popup code which will automatically send the callback to the website that the verification has been succesful.
 
-**No data is ever being collected**. I (and ageverif) can't check if you have been on a certain website
+**No data is ever being collected**. I (and age verification platforms) can't check if you have been on a certain website
