@@ -1,6 +1,6 @@
 # How to use
 
-- [Download the extension on Firefox](https://addons.mozilla.org/addon/age-verification-bypass?utm_source=github_readme, or the [releases page](https://github.com/helloyanis/agechecker.net-bypass/releases/tag/v1.0.0). It will only work on Firefox and firefox based browsers, like Tor or Librewolf. It will NOT work on Chrome, even if you sideload it.
+- [Download the extension on Firefox](https://addons.mozilla.org/addon/age-verification-bypass?utm_source=github_readme), or the [releases page](https://github.com/helloyanis/agechecker.net-bypass/releases/latest). It will only work on Firefox and Firefox-based browsers, like Tor or Librewolf. It will NOT work on Chrome, even if you sideload it.
 
 <a href="https://addons.mozilla.org/addon/age-verification-bypass?utm_source=github_readme"><img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="drawing" width="200"/></a>
 
@@ -14,7 +14,7 @@
 
 # Why do you do this?
 
-It's a proof of conept to show that age verification online is not a good idea. Whenever you send your ID online, it has the potential of getting leaked, and in the worst case scenarios, someone can act as yourself, or blackmail you into revealing where you have been online (with irrefutable proof since they have your ID). No matter what the privacy policy says, or how secure the site is, hackers can always find a way to get the data. See [the amount of breached websites](https://haveibeenpwned.com/PwnedWebsites).
+It's a proof of concept to show that age verification online is not a good idea. Whenever you send your ID online, it has the potential of getting leaked, and in the worst case scenarios, someone can act as yourself, or blackmail you into revealing where you have been online (with irrefutable proof since they have your ID). No matter what the privacy policy says, or how secure the site is, hackers can always find a way to get the data. See [the amount of breached websites](https://haveibeenpwned.com/PwnedWebsites).
 
 By using this extension, you are saving yourself from being in one of these breaches.
 
