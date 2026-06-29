@@ -2,7 +2,7 @@
 
 - [Download the extension on Firefox](https://addons.mozilla.org/addon/age-verification-bypass?utm_source=github_readme, or the [releases page](https://github.com/helloyanis/agechecker.net-bypass/releases/tag/v1.0.0). It will only work on Firefox and firefox based browsers, like Tor or Librewolf. It will NOT work on Chrome, even if you sideload it.
 
-<a href="https://addons.mozilla.org/addon/age-verification-bypass?utm_source=github-readme"><img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="drawing" width="200"/></a>
+<a href="https://addons.mozilla.org/addon/age-verification-bypass?utm_source=github_readme"><img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="drawing" width="200"/></a>
 
 - Make sure it is allowed to run on all websites (or at least on the website you are trying to use it on), and in private browsing mode if you use it, from the extension settings.
 - Try to access a page gated by agechecker.net. The popup will not appear and you will be directly let through. You can try on [ageChecker's demo page](https://agechecker.net/demo)
