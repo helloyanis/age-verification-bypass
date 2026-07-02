@@ -26,3 +26,11 @@ Also, it is technically almost never doable. This add-on is less than 10kb and c
 This extension will, on any website (hence why the "All URLs" permission is needed) look for calls that will create the ageverif.net popup, and instead of letting the request through, will rewrite its own popup code which will automatically send the callback to the website that the verification has been succesful.
 
 **No data is ever being collected**. I (and age verification platforms) can't check if you have been on a certain website
+
+<a href="https://www.star-history.com/?repos=helloyanis%2Fage-verification-bypass&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=helloyanis/age-verification-bypass&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=helloyanis/age-verification-bypass&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=helloyanis/age-verification-bypass&type=date&legend=top-left" />
+ </picture>
+</a>
