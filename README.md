@@ -9,10 +9,10 @@
 
 # Supported services
 
-- [AgeChecker.net](https://agechecker.net/demo)
-- [AgeVerif.com](https://demo.ageverif.com/) (**NOT** for the oAuth2 flow)
-- [AliExpress](https://aliexpress.com/)
-- [Reddit](https://reddit.com) for viewing NSFW communities. *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
+- **[AgeChecker.net](https://agechecker.net/demo)**
+- **[AgeVerif.com](https://demo.ageverif.com/)** (**NOT** for the oAuth2 flow)
+- **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults"
+- **[Reddit](https://reddit.com)** for viewing NSFW communities. *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
 
 # Why do you do this?
 
@@ -24,7 +24,13 @@ Also, it is technically almost never doable. This add-on is less than 10kb and c
 
 # How it works?
 
-This extension will, on any website (hence why the "All URLs" permission is needed) look for calls that will create the ageverif.net popup, and instead of letting the request through, will rewrite its own popup code which will automatically send the callback to the website that the verification has been succesful.
+## For AgeChecker and AgeVerif
+
+This extension will, on any website (hence why the "All URLs" permission is needed) look for calls that will create the age verification popup, and instead of letting the request through, will rewrite its own popup code which will automatically send the callback to the website that the verification has been succesful.
+
+## For Aliexpress and Reddit
+
+The extension will inject a script into the page that will remove the elements like popups and image blurs that are added if a page is set to NSFW
 
 **No data is ever being collected**. I (and age verification platforms) can't check if you have been on a certain website
 
