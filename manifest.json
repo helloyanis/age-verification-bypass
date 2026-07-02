@@ -27,7 +27,6 @@
     ],
     "background": {
         "scripts": [
-            "common.js",
             "websites/agechecker.net.js",
             "websites/ageverif.com.js",
             "websites/reddit.com.js"
