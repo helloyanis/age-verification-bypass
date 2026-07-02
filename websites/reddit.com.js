@@ -36,7 +36,8 @@ browser.webRequest.onBeforeRequest.addListener(
 
                 // Standalone posts
                 if(node.tagName === promptContainerTagName) {
-                    node.shadowRoot.querySelector(".prompt").remove()
+
+                    node.shadowRoot.querySelector?.(".prompt").remove()
                 }
 
                 // Check descendants
@@ -45,8 +46,8 @@ browser.webRequest.onBeforeRequest.addListener(
                     target.remove();
                 }
                 const target2 = node.querySelector?.(promptContainerTagName)
-                if(target2){
-                    target2.shadowRoot.querySelector(".prompt").remove()
+                if(target2 && target2.shadowRoot){
+                    target2.shadowRoot.querySelector?.(".prompt").remove()
                 }
                 }
             }
@@ -68,6 +69,6 @@ browser.webRequest.onBeforeRequest.addListener(
         });
 
     },
-    { urls: ["https://www.redditstatic.com/shreddit/en-US/*.js"]},
+    { urls: ["*://*.cf.preview.redd.it/*"]},
     []
 );
