@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Age verification bypass",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Skips the age verification screens on various platforms!",
     "author": "🦊 helloyanis",
     "developer": {
