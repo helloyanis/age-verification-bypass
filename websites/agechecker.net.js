@@ -7,6 +7,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+// Docs at https://agechecker.net/account/install/custom/client
 
 console.log("agechecker.net bypass script is running");
 browser.webRequest.onBeforeRequest.addListener(
@@ -24,15 +25,23 @@ browser.webRequest.onBeforeRequest.addListener(
   const config = w.AgeCheckerConfig || {};
 
   function complete() {
+
+    // fire status changed event
+    if (typeof config.onstatuschanged === 'function') {
+      config.onstatuschange({"uuid"; crypto.randomUUID(), "status": "accepted"}); // Simulate user accepted
+    }
     // Redirect takes priority
     if (config.redirect_url) {
       w.location.href = config.redirect_url;
       return;
     }
 
-    // Otherwise trigger onclosed callback
+    // Otherwise trigger onClose then onclosed callback
+    if (typeof config.onclose === 'function') {
+      config.onclose(); // Simulate user accepted
+    }
     if (typeof config.onclosed === 'function') {
-      config.onclosed();
+      config.onclosed(); // Simulate popup finished closing animation
     }
   }
 
