@@ -28,7 +28,7 @@ browser.webRequest.onBeforeRequest.addListener(
 
     // fire status changed event
     if (typeof config.onstatuschanged === 'function') {
-      config.onstatuschange({"uuid"; crypto.randomUUID(), "status": "accepted"}); // Simulate user accepted
+      config.onstatuschange({"uuid": crypto.randomUUID(), "status": "accepted"}); // Simulate user accepted
     }
     // Redirect takes priority
     if (config.redirect_url) {
@@ -67,5 +67,27 @@ browser.webRequest.onBeforeRequest.addListener(
 
     },
     { urls: ["https://cdn.agechecker.net/static/popup/v1/popup.js"]},
+    ["blocking"]
+);
+
+browser.webRequest.onBeforeRequest.addListener(
+    function (details) {
+        console.log("Request intercepted:", details.url);
+
+        const filter = browser.webRequest.filterResponseData(details.requestId);
+
+        let decoder = new TextDecoder("utf-8");
+        let encoder = new TextEncoder();
+
+        filter.onstop = async () => {
+            // Creation of user in agechecker API, respond with "accepted"
+            // https://agechecker.net/account/install/custom/server
+            const modifiedResponse = encoder.encode(`{"uuid": "${crypto.randomUUID()}", "status": "accepted"}`);
+            filter.write(modifiedResponse);
+            filter.close()
+        }
+
+    },
+    { urls: ["https://api.agechecker.net/v1/create", "https://sa.agechecker.net/ac_create"]},
     ["blocking"]
 );
