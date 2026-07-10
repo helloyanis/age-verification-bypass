@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Age verification bypass",
-    "version": "1.0.10",
+    "version": "1.1.0",
     "description": "Skips the age verification screens on various platforms!",
     "author": "🦊 helloyanis",
     "developer": {
@@ -29,8 +29,9 @@
         "scripts": [
             "websites/agechecker.net.js",
             "websites/ageverif.com.js",
-            "websites/reddit.com.js",
-            "websites/aliexpress.com.js"
+            "websites/aliexpress.com.js",
+            "websites/bsky.app.js",
+            "websites/reddit.com.js"
         ]
     },
     "action": {

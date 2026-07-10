@@ -11,7 +11,8 @@
 
 - **[AgeChecker.net](https://agechecker.net/demo)**
 - **[AgeVerif.com](https://demo.ageverif.com/)** (**NOT** for the oAuth2 flow)
-- **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults"
+- **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults". The posts are visible, and the medias are revealed by clicking on "Show" in the Sensitive Media banner
+- **[Bluesky](https://bluesky.app)** for viewing sensitive posts without logging in
 - **[Reddit](https://reddit.com)** for viewing NSFW communities. *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
 
 <a href="https://discord.gg/zUq5de7bTU">
@@ -24,7 +25,8 @@ It's a proof of concept to show that age verification online is not a good idea.
 
 By using this extension, you are saving yourself from being in one of these breaches.
 
-Also, it is technically almost never doable. This add-on is less than 10kb and can still bypass the verification process. It can be unsafe, but it's not the role of the laws or dedicated platforms to know if someone's above legal age or not. People who want to bypass it for privacy reasons (or because they are children), will either go on less secure and less moderated websites and get exposed to potentially illegal content, or find a way to get around the verification wall, by using a tool like this one or a friend / parent's ID.
+Also, it is technically almost never doable. This add-on is super lightweight and can still bypass the verification process. It can be unsafe, but it's not the role of the laws or dedicated platforms to know if someone's above legal age or not. People who want to bypass it for privacy reasons (or because they are children), will either go on less secure and less moderated websites and get exposed to potentially illegal content, or find a way to get around the verification wall, by using a tool like this one or a friend / parent's ID.
+
 
 # How it works?
 
@@ -37,6 +39,8 @@ This extension will, on any website (hence why the "All URLs" permission is need
 The extension will inject a script into the page that will remove the elements like popups and image blurs that are added if a page is set to NSFW
 
 **No data is ever being collected**. I (and age verification platforms) can't check if you have been on a certain website
+
+<a href="https://trendshift.io/repositories/71700?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-71700" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/71700/daily?language=JavaScript" alt="helloyanis%2Fage-verification-bypass | Trendshift" width="250" height="55"/></a>
 
 <a href="https://www.star-history.com/?repos=helloyanis%2Fage-verification-bypass&type=date&legend=top-left">
  <picture>
