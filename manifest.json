@@ -32,7 +32,8 @@
             "websites/aliexpress.com.js",
             "websites/bsky.app.js",
             "websites/reddit.com.js",
-            "websites/veriff.me.js"
+            "websites/veriff.me.js",
+            "websites/verifeye.realeyes.ai.js"
         ]
     },
     "action": {
