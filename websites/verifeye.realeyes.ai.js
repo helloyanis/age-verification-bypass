@@ -9,49 +9,33 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 console.log("Realeyes VerifEye bypass script is running");
 
-// patches window.fetch to intercept all verification API calls before they reach the server.
-// verify returns 500 when the server rejects our fake image and filterResponseData can't change the status code.
-function _injectPatcher(details) {
-    if (details.tabId < 0) return;
-    browser.scripting.executeScript({
-        target: { tabId: details.tabId, allFrames: true },
-        world: "MAIN",
-        func: function () {
-            if (window.__verifeyeBypassInstalled) return;
-            window.__verifeyeBypassInstalled = true;
-            const _origFetch = window.fetch;
-            window.fetch = async function (resource, options) {
-                const url = resource instanceof Request ? resource.url : String(resource);
-                if (url.includes("verifeye-service-") && url.includes("/api/v1/verification/")) {
-                    if (url.includes("/init-session")) {
-                        let sid;
-                        try { sid = JSON.parse(options?.body || "{}").verificationSessionId; } catch { }
-                        return new Response(JSON.stringify({
-                            verificationSessionId: sid || crypto.randomUUID(),
-                            livenessCheckType: "disabled",
-                            kinesisConfig: null,
-                            accountHash: ""
-                        }), { status: 200, headers: { "Content-Type": "application/json" } });
-                    }
-                    return new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } });
-                }
-                return _origFetch.apply(this, arguments);
-            };
+function _extractSessionId(details) {
+    let sessionId = crypto.randomUUID();
+    try {
+        const raw = details.requestBody?.raw?.[0]?.bytes;
+        if (raw) {
+            const body = JSON.parse(new TextDecoder().decode(raw));
+            if (body.verificationSessionId) {
+                sessionId = body.verificationSessionId;
+            }
         }
-    }).catch(e => console.warn("[verifeye bypass] executeScript failed:", e));
+    } catch {
+        // keep generated UUID when request body is missing or malformed.
+    }
+    return sessionId;
 }
-// inject into all frames (including iframes). two triggers: faceDetectionService and init-session as a fallback if it was cached.
-browser.webRequest.onBeforeRequest.addListener(_injectPatcher, { urls: ["*://*/*faceDetectionService-CohHJWWF*"] }, []);
-browser.webRequest.onBeforeRequest.addListener(_injectPatcher, { urls: ["*://verifeye-service-eu.realeyes.ai/api/v1/verification/init-session*", "*://verifeye-service-us.realeyes.ai/api/v1/verification/init-session*"] }, []);
 
-// MediaPipe scans for a face at 90% confidence for 2s before calling capture-image. stub skips that entirely.
+// Rewrites both SDK JS and init-session response using one listener to keep interception logic centralized.
 browser.webRequest.onBeforeRequest.addListener(
     function (details) {
         console.log("Request intercepted:", details.url);
         const filter = browser.webRequest.filterResponseData(details.requestId);
         const encoder = new TextEncoder();
-        filter.onstop = function () {
-            filter.write(encoder.encode(`const faceDetectionService = {
+
+        if (details.url.includes("faceDetectionService-")) {
+            // MediaPipe scans for a face at 90% confidence for 2s before capture-image; stub skips that check.
+            filter.onstop = function () {
+                filter.write(encoder.encode(`const faceDetectionService = {
     initialize: async () => {},
     findBestFaceFrame: async () => ({
         hasFace: true,
@@ -59,27 +43,13 @@ browser.webRequest.onBeforeRequest.addListener(
     })
 };
 export { faceDetectionService };`));
-            filter.close();
-        };
-    },
-    { urls: ["*://*/*faceDetectionService-CohHJWWF*"] },
-    ["blocking"]
-);
+                filter.close();
+            };
+            return;
+        }
 
-// strips livenessCheckConfig from init-session so the SDK uses MediaPipe instead of AWS Amplify liveness.
-browser.webRequest.onBeforeRequest.addListener(
-    function (details) {
-        console.log("Request intercepted:", details.url);
-        const filter = browser.webRequest.filterResponseData(details.requestId);
-        const encoder = new TextEncoder();
-        let sessionId = crypto.randomUUID();
-        try {
-            const raw = details.requestBody?.raw?.[0]?.bytes;
-            if (raw) {
-                const body = JSON.parse(new TextDecoder().decode(raw));
-                if (body.verificationSessionId) sessionId = body.verificationSessionId;
-            }
-        } catch { }
+        // Strips livenessCheckConfig from init-session so the SDK uses MediaPipe instead of AWS Amplify liveness.
+        const sessionId = _extractSessionId(details);
         filter.onstop = function () {
             filter.write(encoder.encode(JSON.stringify({
                 verificationSessionId: sessionId,
@@ -92,9 +62,31 @@ browser.webRequest.onBeforeRequest.addListener(
     },
     {
         urls: [
+            "*://*/*faceDetectionService-*",
             "*://verifeye-service-eu.realeyes.ai/api/v1/verification/init-session*",
             "*://verifeye-service-us.realeyes.ai/api/v1/verification/init-session*"
         ]
     },
     ["blocking", "requestBody"]
+);
+
+// normalizes verification endpoints to 200 so fake payloads are accepted by the SDK flow
+browser.webRequest.onHeadersReceived.addListener(
+    function (details) {
+        if (details.statusCode >= 200 && details.statusCode < 300) {
+            return {};
+        }
+        console.log("Normalizing status code:", details.url, details.statusCode);
+        return {
+            responseHeaders: details.responseHeaders || [],
+            statusLine: "HTTP/1.1 200 OK"
+        };
+    },
+    {
+        urls: [
+            "*://verifeye-service-eu.realeyes.ai/api/v1/verification/*",
+            "*://verifeye-service-us.realeyes.ai/api/v1/verification/*"
+        ]
+    },
+    ["blocking", "responseHeaders"]
 );
