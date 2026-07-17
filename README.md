@@ -13,7 +13,7 @@
 - **[AgeVerif.com](https://demo.ageverif.com/)** (**NOT** for the oAuth2 flow)
 - **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults". The posts are visible, and the medias are revealed by clicking on "Show" in the Sensitive Media banner
 - **[Bluesky](https://bluesky.app)** for viewing sensitive posts without logging in
-- **[Reddit](https://reddit.com)** for viewing NSFW communities. *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
+- **[Reddit](https://reddit.com)** for viewing NSFW communities. Log out to see them! *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
 
 <a href="https://discord.gg/zUq5de7bTU">
 <img alt="Discord Invite Badge" width="200" src="https://img.shields.io/badge/Discord-Join%20to%20get%20help-blue?style=social&logo=discord&link=https%3A%2F%2Fdiscord.gg%2FRdUJe4wJnP">
