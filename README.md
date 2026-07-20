@@ -12,7 +12,7 @@
 - **[AgeChecker.net](https://agechecker.net/demo)**
 - **[AgeVerif.com](https://demo.ageverif.com/)** (**NOT** for the oAuth2 flow)
 - **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults". The posts are visible, and the medias are revealed by clicking on "Show" in the Sensitive Media banner
-- **[Bluesky](https://bluesky.app)** for viewing sensitive posts without logging in
+- **[Bluesky](https://bsky.app)** for viewing sensitive posts without logging in
 - **[Reddit](https://reddit.com)** for viewing NSFW communities. Log out to see them! *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
 
 <a href="https://discord.gg/zUq5de7bTU">
