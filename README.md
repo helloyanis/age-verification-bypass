@@ -9,11 +9,13 @@
 
 # Supported services
 
-- **[AgeChecker.net](https://agechecker.net/demo)**
-- **[AgeVerif.com](https://demo.ageverif.com/)** (**NOT** for the oAuth2 flow)
-- **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults". The posts are visible, and the medias are revealed by clicking on "Show" in the Sensitive Media banner
-- **[Bluesky](https://bsky.app)** for viewing sensitive posts without logging in
+- **[AgeChecker.net](https://agechecker.net/demo)** Fully bypassed, unless the site's server does a double check with the AgeChecker server
+- **[AgeGO](https://agego.com)** Basic integration bypassed, advanced integration partially bypassed, server to server mode (when you don't get a popup but are redirected to an AgeGO page) bypassed but the server usually does additional checks so it is unlikely to work.
+- **[AgeVerif.com](https://demo.ageverif.com/)** Basic and advanced integrations bypassed, not for the oAuth2 flow
+- **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults".
+- **[Bluesky](https://bsky.app)** for viewing sensitive posts without logging in. The posts are visible, and the medias are revealed by clicking on "Show" in the Sensitive Media banner
 - **[Reddit](https://reddit.com)** for viewing NSFW communities. Log out to see them! *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
+- **[Veriff](https://veriff.com)** (Supports only a few sites using it! Try, but don't expect it to work!)
 
 <a href="https://discord.gg/zUq5de7bTU">
 <img alt="Discord Invite Badge" width="200" src="https://img.shields.io/badge/Discord-Join%20to%20get%20help-blue?style=social&logo=discord&link=https%3A%2F%2Fdiscord.gg%2FRdUJe4wJnP">
@@ -30,22 +32,14 @@ Also, it is technically almost never doable. This add-on is super lightweight an
 
 # How it works?
 
-## For AgeChecker and AgeVerif
+Depending on the sites, mainly 2 methods are used
 
-This extension will, on any website (hence why the "All URLs" permission is needed) look for calls that will create the age verification popup, and instead of letting the request through, will rewrite its own popup code which will automatically send the callback to the website that the verification has been succesful.
+## Rewrite server response
 
-## For Aliexpress and Reddit
+This extension will, on any website (hence why the "All URLs" permission is needed) look for calls that will create the age verification popup, and instead of letting the request through, will rewrite its own popup code which will automatically send the callback to the website that the verification has been succesful. For example, Bluesky uses this.
 
-The extension will inject a script into the page that will remove the elements like popups and image blurs that are added if a page is set to NSFW
+## Hide and remove elements
+
+The extension can inject a script into the page that will remove the elements like popups and image blurs that are added if a page is set to NSFW. For example, AliExpress and Reddit use this
 
 **No data is ever being collected**. I (and age verification platforms) can't check if you have been on a certain website
-
-<a href="https://trendshift.io/repositories/71700?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-71700" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/71700/daily?language=JavaScript" alt="helloyanis%2Fage-verification-bypass | Trendshift" width="250" height="55"/></a>
-
-<a href="https://www.star-history.com/?repos=helloyanis%2Fage-verification-bypass&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=helloyanis/age-verification-bypass&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=helloyanis/age-verification-bypass&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=helloyanis/age-verification-bypass&type=date&legend=top-left" />
- </picture>
-</a>
