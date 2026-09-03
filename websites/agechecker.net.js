@@ -28,7 +28,7 @@ browser.webRequest.onBeforeRequest.addListener(
 
     // fire status changed event
     if (typeof config.onstatuschanged === 'function') {
-      config.onstatuschange({"uuid": crypto.randomUUID(), "status": "accepted"}); // Simulate user accepted
+      config.onstatuschanged({"uuid": crypto.randomUUID(), "status": "accepted"}); // Simulate user accepted
     }
     // Redirect takes priority
     if (config.redirect_url) {
@@ -59,6 +59,11 @@ browser.webRequest.onBeforeRequest.addListener(
   // Notify loader that the script is ready
   if (typeof config.onready === 'function') {
     config.onready();
+  }
+
+  // Autoload if the config is set to do so (autoload is absent or set to true)
+  if (config.autoload === undefined || config.autoload === true) {
+    complete();
   }
 })(window);`);
             filter.write(modifiedResponse);
