@@ -19,6 +19,7 @@ browser.webRequest.onBeforeRequest.addListener(
             },
             func: () => {
                 const nsfwSubredditPopup = "configured-xpromo-blocking_xpromo_nsfw_blocking_desktop"; //Subreddit popup
+                const nsfwSubredditPopup2 = "configured-xpromo-blocking_xpromo_nsfw_blocking"; //On mobile, the popup has a different id
                 const loginUpsell = "desktop-dynamic-upsell-dialog"; //Login popup
                 const promptContainerTagName = "xpromo-nsfw-blocking-container" //Standalone post popup
 
@@ -30,7 +31,7 @@ browser.webRequest.onBeforeRequest.addListener(
 
                             // Check the node itself
 
-                            if (node.id === nsfwSubredditPopup || node.id === loginUpsell) {
+                            if (node.id === nsfwSubredditPopup || node.id === nsfwSubredditPopup2 || node.id === loginUpsell) {
                                 node.remove();
                                 continue;
                             }
@@ -67,6 +68,9 @@ browser.webRequest.onBeforeRequest.addListener(
                 }
                 if (document.querySelector(promptContainerTagName)) {
                     document.querySelector(promptContainerTagName).shadowRoot.querySelector(".prompt").remove()
+                }
+                if (document.getElementById(nsfwSubredditPopup2)) {
+                    document.getElementById(nsfwSubredditPopup2).remove()
                 }
                 Array.from(document.querySelectorAll("style")).filter(item => item.innerText?.includes(".rpl-scroll-lock"))[0]?.remove()
 
