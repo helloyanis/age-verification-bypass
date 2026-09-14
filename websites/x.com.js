@@ -51,3 +51,49 @@ browser.webRequest.onBeforeRequest.addListener(
     { urls: ["https://x.com/i/api/graphql/*/TweetResultByRestId?*"] },
     ["blocking"]
 );
+
+browser.webRequest.onBeforeRequest.addListener(
+    async function (details) {
+        console.log("Request intercepted:", details.url);
+
+        const filter = browser.webRequest.filterResponseData(details.requestId);
+
+        let decoder = new TextDecoder("utf-8");
+        let encoder = new TextEncoder();
+
+        let response = '';
+        filter.ondata = event => {
+            response += decoder.decode(event.data, { stream: true });
+        };
+
+        filter.onstop = async () => {
+            try {
+                let jsonData = JSON.parse(response);
+                jsonData?.data?.threaded_conversation_with_injections_v2?.instructions?.forEach(instruction => {
+                    if (instruction?.type === "TimelineAddEntries") {
+                        instruction.entries.forEach(entry => {
+                            if (entry?.content?.itemContent?.tweet_results?.result?.__typename === "TweetWithVisibilityResults") {
+                                // Remove the visibility results and set the tweet result to the tweet itself
+                                entry.content.itemContent.tweet_results.result = { ...entry.content.itemContent.tweet_results.result.tweet };
+                                entry.content.itemContent.tweet_results.result.__typename = "Tweet";
+                                entry.content.itemContent.tweet_results.result.core.user_results.result.profile_metadata.profile_interstitial_type = "";
+                                entry.content.itemContent.tweet_results.result.legacy.possibly_sensitive = false;
+                                delete entry.content.itemContent.tweet_results.result.tweet;
+                            }
+                        });
+                    }
+                });
+                console.log("Modified JSON data:", jsonData);
+                filter.write(encoder.encode(JSON.stringify(jsonData)));
+                filter.close();
+            } catch (error) {
+                console.warn("Data is not valid JSON:", error);
+                filter.write(encoder.encode(response));
+                filter.close();
+            }
+        }
+        
+    },
+    { urls: ["https://x.com/i/api/graphql/*/TweetDetail?*"] },
+    ["blocking"]
+);
