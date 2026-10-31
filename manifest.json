@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Age verification bypass",
-    "version": "1.3.13",
+    "version": "1.3.14",
     "description": "Skips the age verification screens on various platforms!",
     "author": "🦊 helloyanis",
     "developer": {
@@ -44,6 +44,7 @@
             "websites/angelogodshackxxx.com.js",
             "websites/bsky.app.js",
             "websites/cosxplay.com.js",
+            "websites/freshnewfaces.club.js",
             "websites/mewe.com.js",
             "websites/pimpbunny.com.js",
             "websites/reddit.com.js",

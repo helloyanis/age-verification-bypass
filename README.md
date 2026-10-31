@@ -22,6 +22,7 @@
 - **[AgeVerification.org](https://ageverification.org)** Fully bypassed by blocking the popup
 - **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults".
 - **[Bluesky](https://bsky.app)** for viewing sensitive posts without logging in. The posts are visible, and the medias are revealed by clicking on "Show" in the Sensitive Media banner. *(A side effect if this is that posts with labels from their author will appear as posts labeled by Bluesky's automoderation)*
+- **[Freshnewfaces.club](https://freshnewfaces.club)** to skip the required age verification and $1 charge to enter the site
 - **[Mewe.com](https://mewe.com)** to skip the required age verification in some regions
 - **[Pimpbunny](https://pimpbunny.com)** to skip the required age verification in some regions
 - **[Reddit](https://reddit.com)** for viewing NSFW subreddits *(can't be found with Reddit search, need a link!)* and posts. Log out to see them! *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
