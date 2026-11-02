@@ -104,6 +104,12 @@ browser.webRequest.onBeforeRequest.addListener(
                                     if (entry.content?.itemContent?.tweet_results?.result) {
                                         entry.content.itemContent.tweet_results.result = unblurTweet(entry.content.itemContent.tweet_results.result);
                                     }
+                                    // Replies in threads
+                                    entry?.content?.items?.forEach(item => {
+                                        if (item.item?.itemContent?.tweet_results?.result) {
+                                            item.item.itemContent.tweet_results.result = unblurTweet(item.item.itemContent.tweet_results.result);
+                                        }
+                                    });
                                 });
                             }
                         });
@@ -116,6 +122,12 @@ browser.webRequest.onBeforeRequest.addListener(
                                     if (entry.content?.itemContent?.tweet_results?.result) {
                                         entry.content.itemContent.tweet_results.result = unblurTweet(entry.content.itemContent.tweet_results.result);
                                     }
+                                    // Replies in threads
+                                    entry?.content?.items?.forEach(item => {
+                                        if (item.item?.itemContent?.tweet_results?.result) {
+                                            item.item.itemContent.tweet_results.result = unblurTweet(item.item.itemContent.tweet_results.result);
+                                        }
+                                    });
                                 });
                             }
                         });
@@ -128,9 +140,51 @@ browser.webRequest.onBeforeRequest.addListener(
                                     if (entry.content?.itemContent?.tweet_results?.result) {
                                         entry.content.itemContent.tweet_results.result = unblurTweet(entry.content.itemContent.tweet_results.result);
                                     }
+                                    // Replies in threads
+                                    entry?.content?.items?.forEach(item => {
+                                        if (item.item?.itemContent?.tweet_results?.result) {
+                                            item.item.itemContent.tweet_results.result = unblurTweet(item.item.itemContent.tweet_results.result);
+                                        }
+                                    });
                                 });
                             }
                         });
+
+                        // Profile pages
+                        jsonData?.data?.user?.result?.timeline?.timeline?.instructions?.forEach(instruction => {
+                        if (instruction?.type === "TimelineAddEntries") {
+                            instruction.entries?.forEach(entry => {
+                                // Basic posts
+                                if (entry.content?.itemContent?.tweet_results?.result) {
+                                    entry.content.itemContent.tweet_results.result = unblurTweet(entry.content.itemContent.tweet_results.result);
+                                }
+
+                                // Replies in threads
+                                entry?.content?.items?.forEach(item => {
+                                    if (item.item?.itemContent?.tweet_results?.result) {
+                                        item.item.itemContent.tweet_results.result = unblurTweet(item.item.itemContent.tweet_results.result);
+                                    }
+                                });
+                            });
+                        }
+
+                        if (instruction?.type === "TimelinePinEntry") {
+                            // This one has a single entry instead of an array of entries
+                            const entry = instruction.entry;
+                            // Basic posts
+                            // Remove the visibility results and set the tweet result to the tweet itself
+                            if (entry.content?.itemContent?.tweet_results?.result) {
+                                entry.content.itemContent.tweet_results.result = unblurTweet(entry.content.itemContent.tweet_results.result);
+                            }
+
+                            // Replies
+                            entry?.content?.items?.forEach(item => {
+                                if (item.item?.itemContent?.tweet_results?.result) {
+                                    item.item.itemContent.tweet_results.result = unblurTweet(item.item.itemContent.tweet_results.result);
+                                }
+                            });
+                        }
+                    });
                         console.log("Modified JSON data:", jsonData);
                         filter.write(encoder.encode(JSON.stringify(jsonData)));
                         filter.close();
@@ -148,85 +202,7 @@ browser.webRequest.onBeforeRequest.addListener(
         }
 
     },
-    { urls: ["https://x.com/i/api/graphql/*/TweetDetail?*", "https://x.com/i/api/graphql/*/SearchTimeline?*", "https://x.com/i/api/graphql/*/HomeTimeline", "https://x.com/i/api/graphql/*/HomeLatestTimeline", "https://x.com/i/api/graphql/*/Bookmarks?*"] },
-    ["blocking"]
-);
-
-// Profile pages
-browser.webRequest.onBeforeRequest.addListener(
-    async function (details) {
-        console.log("Request intercepted:", details.url);
-
-        const filter = browser.webRequest.filterResponseData(details.requestId);
-
-        let decoder = new TextDecoder("utf-8");
-        let encoder = new TextEncoder();
-
-        let response = '';
-        filter.ondata = event => {
-            response += decoder.decode(event.data, { stream: true });
-        };
-
-        filter.onstop = async () => {
-            const twitterSetting = await browser.storage.local.get('twitterSetting').then((result) => result['twitterSetting']);
-            if (twitterSetting && twitterSetting.includes("profile")) {
-                try {
-                    let jsonData = JSON.parse(response);
-                    jsonData?.data?.user?.result?.timeline?.timeline?.instructions?.forEach(instruction => {
-                        if (instruction?.type === "TimelineAddEntries") {
-                            instruction.entries?.forEach(entry => {
-                                // Basic posts
-                                if (entry.content?.itemContent?.tweet_results?.result) {
-                                    entry.content.itemContent.tweet_results.result = unblurTweet(entry.content.itemContent.tweet_results.result);
-                                }
-
-
-                                // Retweets
-                                if (entry?.content?.items?.length > 0) {
-                                    entry.content.items.forEach(item => {
-                                        if (item.item?.itemContent?.tweet_results?.result) {
-                                            item.item.itemContent.tweet_results.result = unblurTweet(item.item.itemContent.tweet_results.result);
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                        if (instruction?.type === "TimelinePinEntry") {
-                            // This one has a single entry instead of an array of entries
-                            const entry = instruction.entry;
-                            // Basic posts
-                            // Remove the visibility results and set the tweet result to the tweet itself
-                            if (entry.content?.itemContent?.tweet_results?.result) {
-                                entry.content.itemContent.tweet_results.result = unblurTweet(entry.content.itemContent.tweet_results.result);
-                            }
-
-                            // Retweets
-                            if (entry?.content?.items?.length > 0) {
-                                entry.content.items.forEach(item => {
-                                    if (item.item?.itemContent?.tweet_results?.result) {
-                                        item.item.itemContent.tweet_results.result = unblurTweet(item.item.itemContent.tweet_results.result);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                    console.log("Modified JSON data:", jsonData);
-                    filter.write(encoder.encode(JSON.stringify(jsonData)));
-                    filter.close();
-                } catch (error) {
-                    console.warn("Data is not valid JSON:", error);
-                    filter.write(encoder.encode(response));
-                    filter.close();
-                }
-            } else {
-                console.log("Twitter setting does not match this request, passing through unmodified.");
-                filter.write(encoder.encode(response));
-                filter.close();
-            }
-        }
-
-    },
-    { urls: ["https://x.com/i/api/graphql/*/UserOriginalsTimeline?*", "https://x.com/i/api/graphql/*/UserTweetsAndReplies?*"] },
+    { urls: ["https://x.com/i/api/graphql/*/TweetDetail?*", "https://x.com/i/api/graphql/*/SearchTimeline?*", "https://x.com/i/api/graphql/*/HomeTimeline", "https://x.com/i/api/graphql/*/HomeLatestTimeline", "https://x.com/i/api/graphql/*/Bookmarks?*", "https://x.com/i/api/graphql/*/UserOriginalsTimeline?*", "https://x.com/i/api/graphql/*/UserTweetsAndReplies?*"] },
     ["blocking"]
 );
 
