@@ -44,6 +44,7 @@
             "websites/angelogodshackxxx.com.js",
             "websites/bsky.app.js",
             "websites/cosxplay.com.js",
+            "websites/discord/discord.com.background.js",
             "websites/erome.com.js",
             "websites/freshnewfaces.club.js",
             "websites/mewe.com.js",
@@ -57,6 +58,17 @@
             "websites/xhamster.com.js"
         ]
     },
+    "content_scripts": [
+        {
+        "matches": ["https://discord.com/*"],
+        "js": [
+            "libraries/pako.umd.min.js",
+            "websites/discord/websocket.js"
+        ],
+        "run_at": "document_start",
+        "world": "MAIN"
+        }
+    ],
     "action": {
         "default_icon": "icon.svg",
         "default_title": "Age verification bypass",
