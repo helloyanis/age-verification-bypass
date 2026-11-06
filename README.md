@@ -16,21 +16,27 @@
 
 **[Read the wiki](https://github.com/helloyanis/age-verification-bypass/wiki/Usage)** for more details!
 
-- **[AgeChecker.net](https://agechecker.net/demo)** Fully bypassed, unless the site's server does a double check with the AgeChecker server
-- **[AgeGO](https://agego.com)** Basic integration bypassed, advanced integration partially bypassed, server to server mode (when you don't get a popup but are redirected to an AgeGO page) bypassed but the server usually does additional checks so it is unlikely to work.
-- **[AgeVerif.com](https://demo.ageverif.com/)** Basic and advanced integrations bypassed, not for the oAuth2 flow
-- **[AgeVerification.org](https://ageverification.org)** Fully bypassed by blocking the popup
-- **[AliExpress](https://aliexpress.com/)** for viewing items categorized as "For adults".
-- **[Bluesky](https://bsky.app)** for viewing sensitive posts without logging in. The posts are visible, and the medias are revealed by clicking on "Show" in the Sensitive Media banner. *(A side effect if this is that posts with labels from their author will appear as posts labeled by Bluesky's automoderation)*
-- **[erome](https://erome.com)** for viewing content in regions requiring ID checks!
-- **[Freshnewfaces.club](https://freshnewfaces.club)** to skip the required age verification and $1 charge to enter the site
-- **[Mewe.com](https://mewe.com)** to skip the required age verification in some regions
-- **[Pimpbunny](https://pimpbunny.com)** to skip the required age verification in some regions
-- **[Reddit](https://reddit.com)** for viewing NSFW subreddits *(can't be found with Reddit search, need a link!)* and posts. Log out to see them! *(It's a clunky solution, I recommend you use [redlib](https://redlib.catsarch.com/) for a fully private Reddit front-end where you can view NSFW posts!)*
-- **[Spankbang](https://spankbang.com)** for viewing videos even when logged out
-- **[Veriff](https://veriff.com)** (Supports only a few sites using it! Try, but don't expect it to work!)
-- **[X.com / Twitter](https://x.com)** for viewing sensitive posts (Needs to be logged in to an account!)
-- [BETA, Not on store yet] **[Redgifs](https://redgifs.com)** for viewing the unrestricted version in blocked countries and regions
+| Website | Bypass level | Details |
+|---|---|---|
+| **[AgeChecker.net](https://agechecker.net/demo)** | ✳️ Partial (almost full) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/agechecker.net) |
+| **[AgeGO](https://agego.com)** | ❗ Partial (Not expected to work!) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/agego) |
+| **[AgeVerif.com](https://demo.ageverif.com/)** | ✳️ Partial (2/3 implementations bypassed) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/ageverif.com) |
+| **[AgeVerification.org](https://demo.ageverif.com/)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/ageverification) |
+| **[AliExpress](https://aliexpress.com/)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/aliexpress) |
+| **[AngeloGodsHack](https://angelogodshackxxx.com/)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/angelogodshack) |
+| **[Bluesky](https://bsky.app)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/bsky) |
+| **[Discord](https://discord.com)** | ✳️ Partial (almost full) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/discord) |
+| **[Erome.com](https://erome.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/erome) |
+| **[Freshnewfaces.club](https://freshnewfaces.club)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/freshnewfaces) |
+| **[Latinaspy.com](https://freshnewfaces.club)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/latinaspy) |
+| **[Mewe](https://mewe.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/mewe) |
+| **[Pimpbunny](https://pimpbunny.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/pimpbunny) |
+| **[Reddit](https://reddit.com)** | ✳️ Partial (Conditions need to be met for the bypass to work) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/reddit) |
+| **[Redgifs](https://redgifs.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/redgifs) |
+| **[Spankbang](https://spankbang.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/spankbang) |
+| **[Veriff](https://veriff.com)** | ❗ Partial (Not expected to work!) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/veriff) |
+| **[X / Twitter](https://x.com)** | ✳️ Partial (Conditions need to be met for the bypass to work) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/x) |
+|  |  |  |
 
 > [!NOTE]
 > Have enough of ID age verification? Check out [this European Citizen's Initiative](https://furries.club/@helloyanis/117212986487046806) asking to stop killing the internet!
