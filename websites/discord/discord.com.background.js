@@ -20,49 +20,11 @@ browser.webRequest.onBeforeSendHeaders.addListener(
                 let decodedHeader = JSON.parse(atob(header.value))
                 // Spoof client to old version, credit to https://github.com/etsycom/Discord-Age-Verification-Bypass for finding!
                 decodedHeader.client_build_number = 6000
-                header.value = JSON.stringify(btoa(decodedHeader))
+                header.value = btoa(JSON.stringify(decodedHeader))
             }
         }
         return { requestHeaders: details.requestHeaders };
     },
     { urls: ["*://discord.com/api/*"] },
     ["blocking", "requestHeaders"]
-);
-
-// Remove the nsfw attribute from channels
-browser.webRequest.onBeforeRequest.addListener(
-    async function (details) {
-        console.log("Request intercepted:", details.url);
-
-        const filter = browser.webRequest.filterResponseData(details.requestId);
-
-        let decoder = new TextDecoder("utf-8");
-        let encoder = new TextEncoder();
-
-        let response = '';
-        filter.ondata = event => {
-            response += decoder.decode(event.data, { stream: true });
-        };
-
-
-        filter.onstop = async () => {
-            try {
-                let jsonData = JSON.parse(response);
-                console.log(jsonData)
-                if(jsonData.nsfw) {
-                    jsonData.nsfw = false
-                    console.log("Changed nsfw to flase")
-                }
-                filter.write(encoder.encode(JSON.stringify(jsonData)));
-                filter.close()
-            } catch (error) {
-                console.error("Error parsing JSON:", error);
-                filter.write(encoder.encode(response));
-                filter.close();
-            }
-        }
-
-    },
-    { urls: ["*://discord.com/api/*/channels/*"] },
-    ["blocking"]
 );

@@ -1,152 +1,80 @@
-/*
-Copyright © 2026 🦊 helloyanis
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-console.log("[Extension] Injected into:", location.href);
 
 (() => {
-    if (window.__gatewayPacketRewriteInstalled) {
+    if (window.__discordGatewayInterceptorInstalled) return;
+    window.__discordGatewayInterceptorInstalled = true;
+
+    if (!window.pako) {
+        console.error("[Age verification bypass] Pako is missing!");
         return;
     }
 
-    window.__gatewayPacketRewriteInstalled = true;
-    const originalParse = JSON.parse;
+    const NativeWebSocket = window.WebSocket;
+    const states = new WeakMap();
 
-    // Let the diagnostic WebSocket listener parse packets without
-    // invoking the transformer a second time.
-    window.__gatewayOriginalJSONParse = originalParse;
-
-    function transformReadyPacket(packet) {
-        // Only modify READY dispatches.
-        if (
-            !packet ||
-            packet.op !== 0 ||
-            packet.t !== "READY" ||
-            !packet.d ||
-            !Array.isArray(packet.d.guilds)
-        ) {
-            return;
-        }
-
-        console.debug("[Age Verification Bypass] READY packet detected", packet);
-        
-        let changedChannels = 0;
-        let changedServers = 0;
-
-        for (const guild of packet.d.guilds) {
-            if(guild.properties.nsfw === true) {
-                guild.properties.nsfw = false
-                guild.properties.nsfw_level = 0
-                guild.properties.owner_configured_content_level = 0
-                changedServers++
-            }
-            if (!Array.isArray(guild.channels)) {
-                continue;
-            }
-
-            for (const channel of guild.channels) {
-                if (
-                    !channel ||
-                    typeof channel.id !== "string" ||
-                    typeof channel.name !== "string"
-                ) {
-                    continue;
-                }
-
-                if (channel.nsfw === true) {
-                    channel.nsfw = false;
-                    changedChannels++;
-                }
-            }
-        }
-
-        if (changedChannels > 0 || changedServers > 0) {
-            console.debug(
-                `[Age Verification Bypass] READY: set ${changedChannels} channel(s) and ${changedServers} servers to not be NSFW`
-            );
-        }
-    }
-
-    JSON.parse = function (text, reviver) {
-        const result = originalParse.call(this, text, reviver);
-
-        try {
-            transformReadyPacket(result);
-        } catch (error) {
-            console.warn(
-                "[Age Verification Bypass] READY transformation failed:",
-                error
-            );
-        }
-
-        return result;
-    };
-
-    console.log("[Gateway rewrite] READY-only parser hook installed");
-})();
-
-
-
-// Decode and log zlib-stream packets from Discord's gateway.
-(() => {
-    // Prevent duplicate installation in the same page world.
-    if (window.__gatewayHookInstalled) {
-        console.warn("[Gateway] Hook already installed");
-        return;
-    }
-
-    window.__gatewayHookInstalled = true;
-
-    const OriginalWebSocket = window.WebSocket;
     const Z_SYNC_FLUSH = 2;
 
-    function hex(bytes, count = 12) {
-        return Array.from(bytes.slice(0, count), b =>
-            b.toString(16).padStart(2, "0")
-        ).join(" ");
-    }
-
-    function endsWithSuffix(bytes) {
-        const n = bytes.length;
-
-        return n >= 4 &&
-            bytes[n - 4] === 0x00 &&
-            bytes[n - 3] === 0x00 &&
-            bytes[n - 2] === 0xff &&
-            bytes[n - 1] === 0xff;
-    }
-
-    function appendBuffer(a, b) {
-        const result = new Uint8Array(a.length + b.length);
-        result.set(a);
-        result.set(b, a.length);
-        return result;
-    }
-
+    // Join output chunks from Pako.
     function joinChunks(chunks) {
-        const totalLength = chunks.reduce(
-            (total, chunk) => total + chunk.length,
-            0
+        const length = chunks.reduce(
+            (total, chunk) => total + chunk.length, 0
         );
 
-        const result = new Uint8Array(totalLength);
+        const output = new Uint8Array(length);
         let offset = 0;
 
         for (const chunk of chunks) {
-            result.set(chunk, offset);
+            output.set(chunk, offset);
             offset += chunk.length;
         }
 
-        return result;
+        return output;
     }
 
-    function toBytes(data) {
+    // Feed data into a persistent Pako stream and collect its output.
+    function pushAndCollect(stream, input) {
+        const chunks = [];
+        const previousOnData = stream.onData;
+
+        stream.onData = chunk => chunks.push(chunk);
+
+        let success;
+
+        try {
+            success = stream.push(input, Z_SYNC_FLUSH);
+        } finally {
+            stream.onData = previousOnData;
+        }
+
+        if (!success || stream.err) {
+            throw new Error(
+                stream.msg || "[Age verification bypass] Pako stream processing failed"
+            );
+        }
+
+        return joinChunks(chunks);
+    }
+
+    // Append byte arrays.
+    function appendBytes(a, b) {
+        const output = new Uint8Array(a.length + b.length);
+        output.set(a, 0);
+        output.set(b, a.length);
+        return output;
+    }
+
+    // Check for the Discord Z_SYNC_FLUSH suffix.
+    function hasFlushSuffix(data) {
+        const n = data.length;
+
+        return n >= 4 &&
+            data[n - 4] === 0x00 &&
+            data[n - 3] === 0x00 &&
+            data[n - 2] === 0xff &&
+            data[n - 1] === 0xff;
+    }
+
+    // Convert incoming WebSocket data into bytes.
+    async function toBytes(data) {
         if (data instanceof ArrayBuffer) {
             return new Uint8Array(data);
         }
@@ -159,140 +87,165 @@ console.log("[Extension] Injected into:", location.href);
             );
         }
 
-        return null;
-    }
-
-    function WrappedWebSocket(url, protocols) {
-        const ws = protocols === undefined
-            ? new OriginalWebSocket(url)
-            : new OriginalWebSocket(url, protocols);
-
-        // Only inspect connections explicitly using zlib-stream.
-        let parsedUrl;
-
-        try {
-            parsedUrl = new URL(String(url));
-        } catch {
-            return ws;
+        if (data instanceof Blob) {
+            return new Uint8Array(await data.arrayBuffer());
         }
 
-        if (
-            parsedUrl.hostname !== "gateway.discord.gg" ||
-            parsedUrl.searchParams.get("compress") !== "zlib-stream"
-        ) {
-            return ws;
-        }
-
-        // Request binary messages as ArrayBuffers, not Blobs.
-        ws.binaryType = "arraybuffer";
-
-        // All stream state belongs to this connection.
-        let buffer = new Uint8Array(0);
-        let outputChunks = [];
-        let pending = Promise.resolve();
-        let decodeFailed = false;
-        let flushCount = 0;
-
-        // Exactly one inflater for the lifetime of this connection.
-        const inflater = new window.pako.Inflate();
-
-        inflater.onData = chunk => {
-            outputChunks.push(chunk);
-        };
-
-        console.debug("[Age Verification Bypass] Monitoring zlib-stream connection", {
-            url: parsedUrl.href
-        });
-
-        // Exactly one message listener. Do not nest another listener here.
-        ws.addEventListener("message", event => {
-            pending = pending.then(async () => {
-                if (decodeFailed) return;
-
-                let bytes;
-
-                if (event.data instanceof Blob) {
-                    bytes = new Uint8Array(
-                        await event.data.arrayBuffer()
-                    );
-                } else {
-                    bytes = toBytes(event.data);
-                }
-
-                if (!bytes) {
-                    console.warn(
-                        "[Age Verification Bypass] Unexpected WebSocket data type",
-                        typeof event.data
-                    );
-                    return;
-                }
-
-                // Keep all bytes until we reach a flush boundary.
-                buffer = appendBuffer(buffer, bytes);
-
-                if (!endsWithSuffix(buffer)) {
-                    return;
-                }
-
-                const compressed = buffer;
-                buffer = new Uint8Array(0);
-                outputChunks = [];
-
-                const blockNumber = ++flushCount;
-
-
-                const ok = inflater.push(
-                    compressed,
-                    Z_SYNC_FLUSH
-                );
-
-                if (!ok || inflater.err !== 0) {
-                    decodeFailed = true;
-
-                    console.error(
-                        "[Age Verification Bypass] Decompression failed. " +
-                        "Further processing stopped for this connection.",
-                        {
-                            block: blockNumber,
-                            error: inflater.err,
-                            message: inflater.msg
-                        }
-                    );
-
-                    return;
-                }
-
-                const decodedBytes = joinChunks(outputChunks);
-
-                if (decodedBytes.length === 0) {
-                    return;
-                }
-
-                const text = new TextDecoder("utf-8")
-                    .decode(decodedBytes);
-
-                try {
-                    const parseForLogging =
-                    window.__gatewayOriginalJSONParse || JSON.parse;
-
-                // console.log("[Age Verification Bypass] Gateway packet observer]", packet);
-                } catch (error) {
-                    console.warn(
-                        "[Age Verification Bypass] Output was not valid JSON",
-                        { text, error }
-                    );
-                }
-            }).catch(error => {
-                console.error("[Age Verification Bypass] Processing error:", error);
-            });
-        });
-
-        return ws;
+        throw new Error("[Age verification bypass] Unsupported WebSocket message type");
     }
 
-    // Preserve the WebSocket constructor's prototype and static inheritance.
-    Object.setPrototypeOf(WrappedWebSocket, OriginalWebSocket);
-    WrappedWebSocket.prototype = OriginalWebSocket.prototype;
+    // Modify the appropriate Gateway events.
+    function modifyGatewayPayload(packet) {
+        if (!packet || packet.op !== 0) return;
 
-    window.WebSocket = WrappedWebSocket;
+        const d = packet.d;
+
+        switch (packet.t) {
+            case "READY":
+                d.user.age_verification_status = 4;
+                d.user.nsfw_allowed = true;
+                break;
+            case "USER_UPDATE":
+                d.age_verification_status = 4;
+                d.nsfw_allowed = true;
+        }
+    }
+
+    // Create an event containing the replacement message.
+    function dispatchReplacement(socket, originalEvent, data, state) {
+        const replacement = new MessageEvent("message", {
+            data,
+            origin: originalEvent.origin,
+            lastEventId: originalEvent.lastEventId,
+            source: originalEvent.source,
+            ports: originalEvent.ports
+        });
+
+        // Prevent our own capture listener from processing it again.
+        state.forwarded.add(replacement);
+
+        socket.dispatchEvent(replacement);
+    }
+
+    // Process an incoming message.
+    async function processIncoming(socket, event, state) {
+        const originalData = event.data;
+
+        // Convert compressed message data into bytes.
+        const chunk = await toBytes(originalData);
+
+        // Accumulate compressed bytes until Z_SYNC_FLUSH.
+        state.pending = appendBytes(state.pending, chunk);
+
+        if (!hasFlushSuffix(state.pending)) {
+            return;
+        }
+
+        const compressed = state.pending;
+        state.pending = new Uint8Array(0);
+
+        // Decompress with the persistent connection inflater.
+        const decodedBytes = pushAndCollect(
+            state.inflater,
+            compressed
+        );
+
+        const decodedText = new TextDecoder().decode(decodedBytes);
+
+        let outputText = decodedText;
+
+        const packet = JSON.parse(decodedText);
+
+        // Log the original decoded payload (debug)
+        // console.log("incoming", packet);
+
+        modifyGatewayPayload(packet);
+
+        outputText = JSON.stringify(packet);
+
+        // Recompress using a separate persistent zlib context.
+        const modifiedCompressed = pushAndCollect(
+            state.deflater,
+            outputText
+        );
+
+        // Preserve the original WebSocket binary type.
+        const outputData = originalData instanceof Blob
+            ? new Blob([modifiedCompressed], {
+                type: originalData.type
+            })
+            : modifiedCompressed.buffer.slice(
+                modifiedCompressed.byteOffset,
+                modifiedCompressed.byteOffset +
+                    modifiedCompressed.byteLength
+            );
+
+        dispatchReplacement(socket, event, outputData, state);
+    }
+
+    // Replacement WebSocket constructor.
+    class InterceptedWebSocket extends NativeWebSocket {
+        constructor(url, protocols) {
+            if (protocols === undefined) {
+                super(url);
+            } else {
+                super(url, protocols);
+            }
+
+            let parsedUrl;
+
+            try {
+                parsedUrl = new URL(String(url), location.href);
+            } catch {
+                return;
+            }
+
+            console.log("[Age verification bypass] Intercepted gateway connection:", parsedUrl.href);
+
+            // Each connection MUST have independent compression contexts.
+            const state = {
+                inflater: new pako.Inflate(),
+                deflater: new pako.Deflate(),
+
+                pending: new Uint8Array(0),
+
+                queue: Promise.resolve(),
+
+                forwarded: new WeakSet()
+            };
+
+            states.set(this, state);
+
+            // Intercept before Discord's own message listeners.
+            this.addEventListener("message", event => {
+                if (state.forwarded.has(event)) return;
+
+                // Prevent Discord from receiving the original event.
+                event.stopImmediatePropagation();
+
+                // Process messages in order.
+                state.queue = state.queue
+                    .then(() => processIncoming(this, event, state))
+                    .catch(error => {
+
+                        console.error(
+                            "[Age verification bypass] Processing error:",
+                            error
+                        );
+
+                        // // Avoid feeding a potentially corrupted stream
+                        // // to Discord. A reconnect creates fresh contexts.
+                        // try {
+                        //     this.close(1011, "Gateway interceptor error");
+                        // } catch {}
+                    });
+
+            }, { capture: true });
+        }
+    }
+
+    // Replace the page's original WebSocket constructor.
+    window.WebSocket = InterceptedWebSocket;
+
+    console.log("[Gateway] WebSocket replacement installed.");
 })();
