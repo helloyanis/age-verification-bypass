@@ -70,3 +70,7 @@ The extension can inject a script into the page that will remove the elements li
 <a rel="me" href="https://furries.club/@helloyanis">Follow me on Mastodon</a>
 
 <meta name="fediverse:creator" content="@helloyanis@furries.club">
+
+## Third party libraries
+
+- [Pako v3.0.3](https://github.com/nodeca/pako/releases/tag/3.0.3) to decode and edit Discord's gateway messages
