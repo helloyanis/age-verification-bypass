@@ -133,7 +133,7 @@ browser.webRequest.onBeforeRequest.addListener(
                         });
 
                         // Bookmarks
-                        jsonData?.data?.bookmarks_timeline_v2?.timeline?.instructions?.forEach(instruction => {
+                        jsonData?.data?.bookmark_timeline_v2?.timeline?.instructions?.forEach(instruction => {
                             if (instruction?.type === "TimelineAddEntries") {
                                 instruction.entries?.forEach(entry => {
                                     // Remove the visibility results and set the tweet result to the tweet itself
