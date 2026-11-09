@@ -199,6 +199,16 @@
             } catch {
                 return;
             }
+            
+            // Only intercept Discord's JSON zlib-stream connection.
+            if (
+                parsedUrl.hostname !== "gateway.discord.gg" ||
+                parsedUrl.protocol !== "wss:" ||
+                parsedUrl.searchParams.get("encoding") !== "json" ||
+                parsedUrl.searchParams.get("compress") !== "zlib-stream"
+            ) {
+                return console.log("[Age verification bypass] Found non-matching URL socket. Skipping.", parsedUrl.hostname);
+            }
 
             console.log("[Age verification bypass] Intercepted gateway connection:", parsedUrl.href);
 
