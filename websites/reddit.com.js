@@ -49,7 +49,7 @@ browser.webRequest.onCompleted.addListener(
                         });
                         // Unblur right rail
 
-                        document.querySelector("pdp-right-rail")?.querySelectorAll("reddit-pdp-right-rail-post").forEach(post=>{
+                        document.querySelectorAll("reddit-pdp-right-rail-post").forEach(post=>{
                             post.querySelector("div[data-testid='post-thumbnail'")?.querySelector("img")?.setAttribute("style","")
                             //18+ shadow
                             post.querySelector("div[data-testid='post-thumbnail'")?.querySelector("div")?.remove()
