@@ -16,5 +16,5 @@ browser.webRequest.onBeforeRequest.addListener(
         }
     },
     { urls: ["*://watchpeopledie.tv/assets/js/uk_age_gate.js?*", "*://watchpeopledie.tv/assets/css/uk_age_gate.css?*"] },
-    ["blocking", "responseHeaders"]
+    ["blocking"]
 );
