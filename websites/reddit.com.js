@@ -19,7 +19,7 @@ browser.webRequest.onCompleted.addListener(
             },
             css:
                 // 18+ popup & login upsell
-                `#configured-xpromo-blocking_xpromo_nsfw_blocking_desktop, configured-xpromo-blocking_xpromo_nsfw_blocking, desktop-dynamic-upsell-dialog{
+                `#configured-xpromo-blocking_xpromo_nsfw_blocking_desktop, #configured-xpromo-blocking_xpromo_nsfw_blocking, #desktop-dynamic-upsell-dialog{
                     display: none !important
                 }
                 `,

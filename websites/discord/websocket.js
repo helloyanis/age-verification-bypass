@@ -102,12 +102,17 @@
 
         switch (packet.t) {
             case "READY":
-                d.user.age_verification_status = 4;
+                d.user.age_verification_status = 3;
                 d.user.nsfw_allowed = true;
+                console.log("[Age verification bypass] READY event modified:", d.user);
                 break;
             case "USER_UPDATE":
-                d.age_verification_status = 4;
+                d.age_verification_status = 3;
                 d.nsfw_allowed = true;
+                console.log("[Age verification bypass] USER_UPDATE event modified:", d);
+                break;
+            default:
+                break;
         }
     }
 
@@ -257,5 +262,5 @@
     // Replace the page's original WebSocket constructor.
     window.WebSocket = InterceptedWebSocket;
 
-    console.log("[Gateway] WebSocket replacement installed.");
+    console.log("[Age verification bypass] WebSocket replacement installed.");
 })();
