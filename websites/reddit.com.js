@@ -56,6 +56,22 @@ browser.webRequest.onCompleted.addListener(
                         })
                     }
                 })
+
+                // Unblur search results
+
+                browser.scripting.insertCSS({
+                    target: {
+                        tabId: details.tabId,
+                    },
+                    css:
+                        // 18+ popup & login upsell
+                        `.thumbnail-blur{
+                            filter: none !important
+                        }
+                        `,
+                    origin: "USER" // Prevent reddit from overriding it
+                    
+                })
             }
         });
 

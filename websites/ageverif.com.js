@@ -157,6 +157,10 @@ browser.webRequest.onBeforeRequest.addListener(
       // CLOSE
       this.emitLocal("close", {});
       safeCall(config.onclose, {});
+    },
+
+    getPortableVerification() {
+      return randomString(48);
     }
   };
 
@@ -200,6 +204,6 @@ browser.webRequest.onBeforeRequest.addListener(
         }
 
     },
-    { urls: ["https://www.ageverif.com/checker.js*"]},
+    { urls: ["https://www.ageverif.com/checker.js?*"]},
     ["blocking"]
 );
