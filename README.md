@@ -35,6 +35,7 @@
 | **[Redgifs](https://redgifs.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/redgifs) |
 | **[Spankbang](https://spankbang.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/spankbang) |
 | **[Veriff](https://veriff.com)** | ❗ Partial (Not expected to work!) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/veriff) |
+| **[Watchpeopledie.tv](https://watchpeopledie.tv)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/watchpeopledie) |
 | **[X / Twitter](https://x.com)** | ✳️ Partial (Conditions need to be met for the bypass to work) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/x) |
 |  |  |  |
 
