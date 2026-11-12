@@ -36,6 +36,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+    // Optional access to all websites, needed for third-party age verification providers embedded on other sites
+    const allSites = { origins: ["<all_urls>"] };
+    const allSitesCheckbox = document.getElementById("allSitesCheckbox");
+    allSitesCheckbox.checked = await browser.permissions.contains(allSites);
+    allSitesCheckbox.addEventListener("change", async (event) => {
+        if (event.target.checked) {
+            // permissions.request must be called synchronously from the user action
+            const granted = await browser.permissions.request(allSites);
+            if (!granted) {
+                allSitesCheckbox.checked = false;
+            }
+        } else {
+            await browser.permissions.remove(allSites);
+        }
+    });
+
     // Initialize the settings in the popup based on stored values
     const bskySetting = await browser.storage.local.get('bskySetting').then((result) => result['bskySetting']);
     if (bskySetting) {

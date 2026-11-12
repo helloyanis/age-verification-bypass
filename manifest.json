@@ -31,6 +31,32 @@
         "notifications"
     ],
     "host_permissions": [
+        "*://*.agechecker.net/*",
+        "*://*.agego.com/*",
+        "*://*.ageverif.com/*",
+        "*://*.ageverification.org/*",
+        "*://*.veriff.com/*",
+        "*://*.veriff.me/*",
+        "*://*.aliexpress.com/*",
+        "*://*.angelogodshackxxx.com/*",
+        "*://*.bsky.app/*",
+        "*://cosxplay.com/*",
+        "*://discord.com/*",
+        "*://*.erome.com/*",
+        "*://*.freshnewfaces.club/*",
+        "*://*.freshnewfaces.com/*",
+        "*://latinaspy.com/*",
+        "*://*.mewe.com/*",
+        "*://*.pimpbunny.com/*",
+        "*://*.reddit.com/*",
+        "*://*.redgifs.com/*",
+        "*://rule34.xxx/*",
+        "*://spankbang.com/*",
+        "*://watchpeopledie.tv/*",
+        "*://x.com/*",
+        "*://*.xhamster.com/*"
+    ],
+    "optional_host_permissions": [
         "<all_urls>"
     ],
     "background": {

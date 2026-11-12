@@ -4,7 +4,8 @@
 
 <a href="https://addons.mozilla.org/addon/age-verification-bypass?utm_source=github_readme"><img src="https://blog.mozilla.org/addons/files/2020/04/get-the-addon-fx-apr-2020.svg" alt="drawing" width="200"/></a>
 
-- Make sure it is allowed to run on all websites (or at least on the website you are trying to use it on), and in private browsing mode if you use it, from the extension settings.
+- Make sure it is allowed to access the supported websites, and to run in private browsing mode if you use it, from the extension settings.
+- The extension only asks for access to the supported websites and to the age verification providers' own domains. Providers like AgeChecker.net, AgeGO, AgeVerif, AgeVerification.org and Veriff are also embedded on many other websites: to bypass them there, open the extension popup and tick **"Bypass age verification providers on all websites"**. This grants the optional "Access your data for all websites" permission, and unticking it removes the permission.
 - Try to access a page gated by age verification, you will be directly let through. You can try on [ageChecker's demo page](https://agechecker.net/demo)
 
 <a href="https://discord.gg/zUq5de7bTU"><img alt="Discord Invite Badge" width="200" src="https://img.shields.io/badge/Discord-Join%20to%20get%20help-blue?style=social&logo=discord"></a>
@@ -57,7 +58,7 @@ Depending on the sites, mainly 2 methods are used
 
 ## Rewrite server response
 
-This extension will, on any website (hence why the "All URLs" permission is needed) look for calls that will create the age verification popup, and instead of letting the request through, will rewrite its own popup code which will automatically send the callback to the website that the verification has been successful. For example, Bluesky uses this.
+This extension will, on the supported websites (and on any website if you enabled the optional "all websites" access in the popup), look for calls that will create the age verification popup, and instead of letting the request through, will rewrite its own popup code which will automatically send the callback to the website that the verification has been successful. For example, Bluesky uses this.
 
 ## Hide and remove elements
 
