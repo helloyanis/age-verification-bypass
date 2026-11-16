@@ -19,7 +19,7 @@ browser.webRequest.onCompleted.addListener(
             },
             css:
                 // 18+ popup & login upsell
-                `#configured-xpromo-blocking_xpromo_nsfw_blocking_desktop, #configured-xpromo-blocking_xpromo_nsfw_blocking, #desktop-dynamic-upsell-dialog{
+                `#configured-xpromo-blocking_xpromo_nsfw_blocking_desktop, #configured-xpromo-blocking_xpromo_nsfw_blocking, #desktop-dynamic-upsell-dialog, .configured-xpromo-modal, .prompt{
                     display: none !important
                 }
                 `,
@@ -48,11 +48,9 @@ browser.webRequest.onCompleted.addListener(
                             container.removeAttribute("blurred");
                         });
                         // Unblur right rail
-
-                        document.querySelectorAll("reddit-pdp-right-rail-post").forEach(post=>{
-                            post.querySelector("div[data-testid='post-thumbnail'")?.querySelector("img")?.setAttribute("style","")
-                            //18+ shadow
-                            post.querySelector("div[data-testid='post-thumbnail'")?.querySelector("div")?.remove()
+                        document.querySelectorAll("div[data-testid='post-thumbnail'")?.forEach(thumbnail=>{
+                            thumbnail.querySelector("img")?.setAttribute("style","")
+                            thumbnail.querySelector("div")?.remove()
                         })
                     }
                 })
@@ -65,7 +63,7 @@ browser.webRequest.onCompleted.addListener(
                     },
                     css:
                         // 18+ popup & login upsell
-                        `.thumbnail-blur{
+                        `.thumbnail-blur, {
                             filter: none !important
                         }
                         `,

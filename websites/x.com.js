@@ -70,7 +70,7 @@ browser.webRequest.onBeforeRequest.addListener(
                     twitterSetting.includes("following") && details.url.includes("HomeLatestTimeline") ||
                     twitterSetting.includes("search") && details.url.includes("SearchTimeline") ||
                     twitterSetting.includes("bookmarks") && details.url.includes("Bookmarks") ||
-                    twitterSetting.includes("profile") && (details.url.includes("UserOriginalsTimeline") || details.url.includes("UserTweetsAndReplies")) ||
+                    twitterSetting.includes("profile") && (details.url.includes("UserOriginalsTimeline") || details.url.includes("UserTweetsAndReplies") || details.url.includes("UserRepliesTimeline") || details.url.includes("UserRepostsTimeline")) ||
                     details.url.includes("TweetDetail")
                 ) {
                     try {
@@ -202,7 +202,7 @@ browser.webRequest.onBeforeRequest.addListener(
         }
 
     },
-    { urls: ["https://x.com/i/api/graphql/*/TweetDetail?*", "https://x.com/i/api/graphql/*/SearchTimeline?*", "https://x.com/i/api/graphql/*/HomeTimeline", "https://x.com/i/api/graphql/*/HomeLatestTimeline", "https://x.com/i/api/graphql/*/Bookmarks?*", "https://x.com/i/api/graphql/*/UserOriginalsTimeline?*", "https://x.com/i/api/graphql/*/UserTweetsAndReplies?*"] },
+    { urls: ["https://x.com/i/api/graphql/*/TweetDetail?*", "https://x.com/i/api/graphql/*/SearchTimeline?*", "https://x.com/i/api/graphql/*/HomeTimeline", "https://x.com/i/api/graphql/*/HomeLatestTimeline", "https://x.com/i/api/graphql/*/Bookmarks?*", "https://x.com/i/api/graphql/*/UserOriginalsTimeline?*", "https://x.com/i/api/graphql/*/UserTweetsAndReplies?*", "https://x.com/i/api/graphql/*/UserRepliesTimeline?*", "https://x.com/i/api/graphql/*/UserRepostsTimeline?*"] },
     ["blocking"]
 );
 
@@ -226,6 +226,9 @@ function unblurTweet(tweet) {
     }
     if(tweet?.nested_quoted_tweet_results?.result?.__typename === "TweetWithVisibilityResults") {
         tweet.nested_quoted_tweet_results.result = unblurTweet(tweet.nested_quoted_tweet_results.result);
+    }
+    if(tweet?.legacy?.retweeted_status_result?.result?.__typename === "TweetWithVisibilityResults") {
+        tweet.legacy.retweeted_status_result.result = unblurTweet(tweet.legacy.retweeted_status_result.result)
     }
     if(tweet?.quotedRefResult?.result?.__typename === "TweetWithVisibilityResults") {
         tweet.quotedRefResult.result.__typename = "Tweet";
