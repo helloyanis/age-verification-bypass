@@ -42,6 +42,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelector("select[name='bskySetting']").value = bskySetting;
     }
 
+    const discordSetting = await browser.storage.local.get('discordSetting').then((result) => result['discordSetting']);
+    if (discordSetting) {
+        document.querySelector("select[name='discordSetting']").value = discordSetting;
+    }
+
     const redditSetting = await browser.storage.local.get('redditSetting').then((result) => result['redditSetting']);
     if (redditSetting) {
         document.querySelector("select[name='redditSetting']").value = redditSetting;

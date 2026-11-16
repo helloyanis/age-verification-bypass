@@ -11,6 +11,10 @@ console.log("Discord bypass script is running");
 
 browser.webRequest.onBeforeSendHeaders.addListener(
     async function (details) {
+        let discordSetting = await browser.storage.local.get('discordSetting').then((result) => result['discordSetting']);
+
+        if(((details.url === "https://discord.com/api/v9/quests/@me") && discordSetting === "questFix") || discordSetting === "off") return console.log("Bypassed version spoof as per user preference"); // Skip checking for quests
+        
         console.log("Request intercepted:", details.url);
 
         // For discord to send messages, need to spoof header to an old version that dodn't have age checks

@@ -33,7 +33,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
                 (recommended)</label>
         </div>
         <div class="surface settings">
-            <div class="setting">
+            <div class="setting" id="blueskySetting">
             <label for="blueskyBehaviorSelect">Bluesky behavior:</label>
             <select id="blueskyBehaviorSelect" name="bskySetting" settingChange>
                 <option value="media">Show text, hide media (Default)</option>
@@ -43,7 +43,16 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
             <p>❗ Need to clear browsing data or use a new private browsing window for this change to take effect</p>
             </div>
             
-            <div class="setting">
+            <div class="setting" id="discordSetting">
+            <label for="discordBehaviorSelect">Discord behavior:</label>
+            <select id="discordBehaviorSelect" name="discordSetting" settingChange>
+                <option value="fullVersionSpoof">Enable version spoofing, don't load quests (Default. Harder for Discord to detect this add-on's usage)</option>
+                <option value="questFix">Enable version spoofing, fix quests loading (⚠️ Easier for Discord to detect this add-on's usage)</option>
+                <option value="off">Disable version spoofing (Enable this if you are already verified on Discord)</option>
+            </select>
+            </div>
+
+            <div class="setting" id="redditSetting">
             <label for="redditBehaviorSelect">Reddit behavior:</label>
             <select id="redditBehaviorSelect" name="redditSetting" settingChange>
                 <option value="blur">Blur media (Default)</option>
@@ -51,7 +60,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
             </select>
             </div>
 
-            <div class="setting">
+            <div class="setting" id="twitterSetting">
                 <label for="twitterBehaviorSelect">X / Twitter behavior :</label>
                 <div><button id="unblurAllTwitterOptions">🔞 Unblur all</button> <button id="blurAllTwitterOptions">🛡️ Blur all</button></div>
                 <p>Manual setting : Select the options you want to unblur</p>

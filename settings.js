@@ -18,6 +18,12 @@ async function initializeSettings() {
         browser.storage.local.set({ 'bskySetting': "media" }); //Default to blurring media on bluesky
     }
 
+    // Discord
+    let discordSetting = await browser.storage.local.get('discordSetting').then((result) => result['discordSetting']);
+    if(!discordSetting){
+        browser.storage.local.set({ 'discordSetting': "fullVersionSpoof" }); //Default to spoofing version on all requests
+    }
+
     // Reddit
     let redditSetting = await browser.storage.local.get('redditSetting').then((result) => result['redditSetting']);
     if(!redditSetting){
