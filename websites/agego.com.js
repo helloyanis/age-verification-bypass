@@ -21,7 +21,20 @@ browser.webRequest.onBeforeRequest.addListener(
         let decoder = new TextDecoder("utf-8");
         let encoder = new TextEncoder();
 
+        let response = '';
+        filter.ondata = event => {
+            response += decoder.decode(event.data, { stream: true });
+        };
+
         filter.onstop = async () => {
+           browser.storage.local.get('agego').then((result) => {
+        const agegoSetting = result['agego'];
+          setMostRecentSite("agego", details.tabId)
+        if (agegoSetting == "off"){
+          filter.write(encoder.encode(response)); // Send back original response
+          filter.close()
+        }
+        else {
             // Replace the original age verif popup with this one
             const modifiedResponse = encoder.encode(`(function () {
   const queue = window.AGEGO?.e;
@@ -74,6 +87,8 @@ browser.webRequest.onBeforeRequest.addListener(
             filter.write(modifiedResponse);
             filter.close()
         }
+      })
+    }
 
     },
     { urls: ["https://verifycdn.agego.com/v1/verify.js"]},
@@ -83,10 +98,36 @@ browser.webRequest.onBeforeRequest.addListener(
 // Server to server integration (doesn't bypass server side checks!)
 browser.webRequest.onBeforeRequest.addListener(
     async function (details) {
-        console.log("Request intercepted:", details.url);
-        // Get the redirect URL from the URL param, in case the site doesn't do server checks
-        return {redirectUrl: new URL(details.url).searchParams.get("returnto")}; // Block the request and redirect to the redirect_url param,
+        const filter = browser.webRequest.filterResponseData(details.requestId);
+
+        let decoder = new TextDecoder("utf-8");
+        let encoder = new TextEncoder();
+
+        let response = '';
+        filter.ondata = event => {
+            response += decoder.decode(event.data, { stream: true });
+        };
+
+        filter.onstop = async () => {
+          const agegoSetting = await browser.storage.local.get('agego').then((result) => result['agego']);
+          // Save the most recently loaded site, to help with opening the popup page at the right site.
+          setMostRecentSite("agego", details.tabId)
+        if (agegoSetting == "off"){
+          filter.write(encoder.encode(response)); // Send back original response
+          filter.close()
+        }
+        else {
+          const jsonData = JSON.parse(response);
+          browser.tabs.update(
+            details.tabId,
+            {
+              url: jsonData.url
+            }
+          )
+        }
+      }
+
     },
-    { urls: ["https://myapi.agego.com/s2s/start/?*"]},
+    { urls: ["https://myapi.agego.com/api/session/return"]},
     ["blocking"]
 );

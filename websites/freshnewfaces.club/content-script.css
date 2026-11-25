@@ -1,0 +1,7 @@
+body {
+    overflow: unset !important;
+    visibility: unset !important;
+}
+#age-verification-modal {
+    display: none !important;
+}

@@ -13,9 +13,15 @@ browser.webRequest.onBeforeRequest.addListener(
     async function (details) {
         console.log("Request intercepted:", details.url);
 
-
-        // Cancel the request to prevent the age verification modal from showing up
-        return { cancel: true };
+        const ageverificationSetting = await browser.storage.local.get('ageverification.org').then((result) => result['ageverification.org']);
+          setMostRecentSite("ageverification.org", details.tabId)
+        if (ageverificationSetting == "off"){
+          return
+        }
+        else {
+            // Cancel the request to prevent the age verification modal from showing up
+            return { cancel: true };
+        }
 
     },
     { urls: ["*://*.ageverification.org/inject/script.min.js*"]},

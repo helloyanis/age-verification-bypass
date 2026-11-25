@@ -1,0 +1,16 @@
+.card-dsa-wrapper img,
+.dsa--visible--wrapper img {
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+.J_SAFETY_FILER_MODAL,
+img[src='https://ae-pic-a1.aliexpress-media.com/kf/S082ae95bce89462b9548a1d53f222ab4p/72x72.png'],
+img[src='https://ae-pic-a1.aliexpress-media.com/kf/S082ae95bce89462b9548a1d53f222ab4p/72x72.png_120x120.png'],
+img[src='https://ae-pic-a1.aliexpress-media.com/kf/S082ae95bce89462b9548a1d53f222ab4p/72x72.png_120x120.png_.webp'],
+div[data-anc='body']>div>div>div>div>div>div,
+div[data-spm='platformRecommendH5']>div>div>div,
+#card-list>div>div>div:nth-child(2),
+.slick-slide>div>div>div>div:nth-child(2) {
+    display: none !important
+}

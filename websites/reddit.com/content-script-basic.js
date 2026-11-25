@@ -7,32 +7,23 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
+document.querySelector("xpromo-nsfw-blocking-container")?.shadowRoot.querySelector?.(".prompt").remove()
+document.body.classList.remove("rpl-scroll-lock")
 
-console.log("Latinaspy bypass script is running");
-browser.webRequest.onCompleted.addListener(
-    async function (details) {
-        console.log("Request intercepted:", details.url);
+// Add mutation observer to detect when the NSFW content is loaded and remove the blur
+const observer = new MutationObserver((mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            const blurElement = document.querySelector("xpromo-nsfw-blocking-container")?.shadowRoot.querySelector?.(".prompt");
+            if (blurElement) {
+                blurElement.remove();
+                document.body.classList.remove("rpl-scroll-lock");
+                observer.disconnect(); // Stop observing after the element is removed
+                break;
+            }
+        }
+    }
+});
 
-        await browser.scripting.insertCSS({
-            target: {
-                tabId: details.tabId,
-            },
-            css:
-                // 18+ blur
-                `[data-attribute-type="content-overlay"]{
-                    display: none !important
-                }
-
-                * {
-                    filter: none !important;
-                    backdrop-filter: none !important
-                }
-                `,
-            origin: "USER"
-            
-        })
-
-
-    },
-    { urls: ["*://latinaspy.com/*", "*://latinaspy.com/*?*"], types: ["main_frame", "sub_frame"]}
-);
+// Start observing the document body for changes
+observer.observe(document.body, { childList: true, subtree: true });

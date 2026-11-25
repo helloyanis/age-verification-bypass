@@ -1,0 +1,6 @@
+.bubble-mobile-top, .over18, .gate-overlay, .play-over, .img-blur {
+    display: none !important;
+}
+* {
+    filter: unset !important;
+}

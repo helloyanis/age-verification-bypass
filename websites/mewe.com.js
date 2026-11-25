@@ -28,10 +28,19 @@ browser.webRequest.onBeforeRequest.addListener(
 
         filter.onstop = async () => {
             try {
-                let jsonData = JSON.parse(response);
-                jsonData.ageVerificationData.verificationStatus = "not_needed";
-                filter.write(encoder.encode(JSON.stringify(jsonData)));
-                filter.close()
+                setMostRecentSite("mewe", details.tabId)
+                const meweSetting = await browser.storage.local.get('mewe').then((result) => result['mewe']);
+                setMostRecentSite("mewe", details.tabId)
+                if (meweSetting == "off") {
+                    filter.write(encoder.encode(response)); // Send back original response
+                    filter.close()
+                }
+                else {
+                    let jsonData = JSON.parse(response);
+                    jsonData.ageVerificationData.verificationStatus = "not_needed";
+                    filter.write(encoder.encode(JSON.stringify(jsonData)));
+                    filter.close()
+                }
             } catch (error) {
                 console.error("Error parsing JSON:", error);
                 filter.write(encoder.encode(response));

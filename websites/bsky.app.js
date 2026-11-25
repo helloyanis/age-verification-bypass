@@ -27,9 +27,15 @@ browser.webRequest.onBeforeRequest.addListener(
         };
 
         filter.onstop = async () => {
+            setMostRecentSite("bsky", details.tabId)
             try {
                 let jsonData = JSON.parse(response);
-                const blurSetting = await browser.storage.local.get('bskySetting').then((result) => result['bskySetting']);
+                const blurSetting = await browser.storage.local.get('bsky').then((result) => result['bsky']);
+                if(blurSetting == "off"){
+                    filter.write(encoder.encode(response)); // Send back original response
+                    filter.close()
+                    return
+                }
                 jsonData.views.forEach(view => {
                     view.policies.labelValueDefinitions = []
                     view.policies.labelValues.forEach(label => {
@@ -80,6 +86,13 @@ browser.webRequest.onBeforeRequest.addListener(
 
         filter.onstop = async () => {
             try {
+                setMostRecentSite("bsky", details.tabId)
+                const blurSetting = await browser.storage.local.get('bsky').then((result) => result['bsky']);
+                if(blurSetting == "off"){
+                    filter.write(encoder.encode(response)); // Send back original response
+                    filter.close()
+                    return
+                }
                 let jsonData = JSON.parse(response);
                 if (details.url.includes("getPostThreadV2")) {
                     // Single post view
@@ -136,6 +149,13 @@ browser.webRequest.onBeforeRequest.addListener(
 
         filter.onstop = async () => {
             try {
+                setMostRecentSite("bsky", details.tabId)
+                const blurSetting = await browser.storage.local.get('bsky').then((result) => result['bsky']);
+                if(blurSetting == "off"){
+                    filter.write(encoder.encode(response)); // Send back original response
+                    filter.close()
+                    return
+                }
                 let jsonData = JSON.parse(response);
                 jsonData.regions = []
                 filter.write(encoder.encode(JSON.stringify(jsonData)));

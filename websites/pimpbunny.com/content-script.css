@@ -1,0 +1,9 @@
+html[data-age-gate], html[data-age-gate] body {
+    overflow: unset !important
+}
+html[data-age-gate] body > :not([data-age-screen]) {
+    visibility: unset !important;
+}
+*[data-age-screen="check"], template[data-age-deferred]{
+    display: none !important;
+}

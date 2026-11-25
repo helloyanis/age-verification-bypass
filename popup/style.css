@@ -17,7 +17,7 @@ html{
     margin-bottom: 0;
 }
 
-.surface.important {
+.important {
     border: 1px solid AccentColor;
 }
 
@@ -27,7 +27,18 @@ html{
     gap: 1rem;
 }
 
-.setting{
+.setting {
+    display: none;
+}
+
+.setting.active{
     display: flex;
     flex-direction: column;
+}
+.profile{
+    width: 50px;
+}
+.footer{
+    display: flex;
+    flex-direction: row;
 }

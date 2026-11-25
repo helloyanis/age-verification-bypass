@@ -13,12 +13,7 @@ console.log("rule34 script is running");
 if(browser.notifications){ // Check if the notifications API is available
     browser.notifications.onClicked.addListener(async (notificationId) => {
         if (notificationId === "r34-bypass-notification") {
-                    await browser.scripting.executeScript({
-                target: { tabId: (await browser.tabs.query({ active: true, currentWindow: true }))[0].id },
-                func: () => {
-                    window.location.href = "https://www.torproject.org/download/"
-                }
-            });
+            browser.tabs.create({url: "https://www.torproject.org/download/"})
         }
     });
 }

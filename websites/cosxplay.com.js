@@ -12,7 +12,7 @@ console.log("Cosxplay bypass script is running");
 browser.webRequest.onBeforeRequest.addListener(
     async function (details) {
         console.log("Request intercepted:", details.url);
-
+        setMostRecentSite("cosxplay", details.tabId)
 
         // Cancel the request to prevent the age verification modal from showing up
         return { cancel: true };

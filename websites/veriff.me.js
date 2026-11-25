@@ -26,6 +26,13 @@ browser.webRequest.onBeforeRequest.addListener(
 
         filter.onstop = async () => {
             try {
+                setMostRecentSite("veriff", details.tabId)
+                const veriffSetting = await browser.storage.local.get('veriff').then((result) => result['veriff']);
+                if (veriffSetting == "off") {
+                    filter.write(encoder.encode(response)); // Send back original response
+                    filter.close()
+                    return;
+                }
                 let jsonData = JSON.parse(response);
                 console.log("Original JSON data:", jsonData);
                 browser.tabs.update(details.tabId, { url: jsonData.vendorIntegration.callback });
@@ -52,6 +59,13 @@ browser.webRequest.onBeforeRequest.addListener(
                 const encoder = new TextEncoder();
 
                 filter.onstop = function () {
+                    setMostRecentSite("veriff", details.tabId);
+                    const veriffSetting = browser.storage.local.get('veriff').then((result) => result['veriff']);
+                    if (veriffSetting == "off") {
+                        filter.write(encoder.encode(response)); // Send back original response
+                        filter.close()
+                        return;
+                    }
                         const modifiedResponse = encoder.encode(`(function (w) {
     function createResponse() {
         return {
@@ -97,6 +111,13 @@ browser.webRequest.onBeforeRequest.addListener(
                 const encoder = new TextEncoder();
 
                 filter.onstop = function () {
+                    setMostRecentSite("veriff", details.tabId);
+                    const veriffSetting = browser.storage.local.get('veriff').then((result) => result['veriff']);
+                    if (veriffSetting == "off") {
+                        filter.write(encoder.encode(response)); // Send back original response
+                        filter.close()
+                        return;
+                    }
                         const modifiedResponse = encoder.encode(`const MESSAGES = {
   STARTED: "STARTED",
   FINISHED: "FINISHED",

@@ -8,38 +8,24 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// This script is a template that you can base other websites on.
-console.log("Template bypass script is running");
+console.log("spankbang.com bypass script is running");
+
+loadableContentScripts.push({
+    id: "spankbang-contentScript",
+    js: ["websites/spankbang.com/content-script.js"],
+    css: ["websites/spankbang.com/content-script.css"],
+    cssOrigin: "user",
+    matches: ["*://*.spankbang.com/*"],
+    runAt: "document_start",
+    world: "MAIN"
+});
+
 browser.webRequest.onBeforeRequest.addListener(
     async function (details) {
         console.log("Request intercepted:", details.url);
-
-
-        // TO MODIFY RESPONSE and spoof your own age verification modal
-        const filter = browser.webRequest.filterResponseData(details.requestId);
-
-        let decoder = new TextDecoder("utf-8");
-        let encoder = new TextEncoder();
-
-        filter.onstop = async () => {
-            // Replace the original age verif popup with this one
-            const modifiedResponse = encoder.encode(`Here, replace the server response with whatever you write here!`);
-            filter.write(modifiedResponse);
-            filter.close()
-        }
-
-        // TO RUN SCRIPTS ON THE PAGE WHEN THE REQUEST FIRES
-        await browser.scripting.executeScript({
-        target: {
-            tabId: details.tabId, // The tab that initiated the request!
-        },
-        func: () => {
-            //your code goes here!
-            document.body.style.border = "5px solid green";
-        },
-        });
+        setMostRecentSite("spankbang", details.tabId)
 
     },
-    { urls: ["https://cdn.agechecker.net/static/popup/v1/popup.js"]}, // The URL that will trigger the above code
-    ["blocking"]
+    { urls: ["https://spankbang.com/*"] },
+    []
 );

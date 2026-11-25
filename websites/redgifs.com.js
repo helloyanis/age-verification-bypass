@@ -29,6 +29,13 @@ browser.webRequest.onBeforeRequest.addListener(
 
 
         filter.onstop = async () => {
+            const redgifsSetting = await browser.storage.local.get('redgifs').then((result) => result['redgifs']);
+            setMostRecentSite("redgifs", details.tabId)
+            if (redgifsSetting == "off") {
+                filter.write(encoder.encode(response)); // Send back original response
+                filter.close();
+                return;
+            }
             if(!response) {
                 console.warn("Response is empty, skipping modification.");
                 filter.close();

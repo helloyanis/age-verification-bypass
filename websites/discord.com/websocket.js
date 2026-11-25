@@ -15,6 +15,7 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
         console.error("[Age verification bypass] Pako is missing!");
         return;
     }
+    console.log("[Age verification bypass] Pako is present. Installing WebSocket interceptor...");
 
     const NativeWebSocket = window.WebSocket;
     const states = new WeakMap();

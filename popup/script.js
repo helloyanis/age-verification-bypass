@@ -36,26 +36,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+    // Add an event listener for the website selector to show the correct site
+    const websiteSelect = document.getElementById("websiteSelect");
+    websiteSelect.addEventListener("change", (event) => {
+        document.querySelector(".setting.active")?.classList.remove("active")
+        document.getElementById(event.target.value).classList.add("active")
+    })
+
+    // Initiate website select state based on the last loaded website
+    const mostRecentSite = await browser.storage.local.get('mostRecentSite').then((result) => result['mostRecentSite']);
+    websiteSelect.value = `${mostRecentSite}Setting`
+    document.querySelector(".setting.active")?.classList.remove("active")
+    document.getElementById(`${mostRecentSite}Setting`).classList.add("active")
+
     // Initialize the settings in the popup based on stored values
-    const bskySetting = await browser.storage.local.get('bskySetting').then((result) => result['bskySetting']);
-    if (bskySetting) {
-        document.querySelector("select[name='bskySetting']").value = bskySetting;
-    }
+    initSettingUI()
 
-    const discordSetting = await browser.storage.local.get('discordSetting').then((result) => result['discordSetting']);
-    if (discordSetting) {
-        document.querySelector("select[name='discordSetting']").value = discordSetting;
-    }
-
-    const redditSetting = await browser.storage.local.get('redditSetting').then((result) => result['redditSetting']);
-    if (redditSetting) {
-        document.querySelector("select[name='redditSetting']").value = redditSetting;
-    }
-
-    const twitterSetting = await browser.storage.local.get('twitterSetting').then((result) => result['twitterSetting']);
+    const twitterSetting = await browser.storage.local.get('twitter').then((result) => result['twitter']);
     if (twitterSetting) {
         twitterSetting.split("&").forEach(value => {
-            const option = document.querySelector(`select[name='twitterSetting'] option[value='${value}']`);
+            const option = document.querySelector(`select[name='twitter'] option[value='${value}']`);
             if (option) {
                 option.selected = true;
             }
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         Array.from(twitterSelect.options).forEach(option => option.selected = true);
         await browser.runtime.sendMessage({
             action: 'updateSetting',
-            key: 'twitterSetting',
+            key: 'twitter',
             value: Array.from(twitterSelect.selectedOptions).map(option => option.value).join("&")
         });
     });
@@ -89,8 +89,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         Array.from(twitterSelect.options).forEach(option => option.selected = false);
         await browser.runtime.sendMessage({
             action: 'updateSetting',
-            key: 'twitterSetting',
+            key: 'twitter',
             value: ''
         });
     });
 })
+
+async function initSettingUI(){
+    const settings = ['agechecker', 'agego', 'ageverif', 'ageverification.org', 'aliexpress', 'angelogodshackxxx', 'bsky', 'cosxplay', 'discord', 'erome', 'freshnewfaces', 'latinaspy', 'mewe', 'pimpbunny', 'reddit', 'redgifs', 'spankbang', 'veriff', 'watchpeopledie'];
+    await browser.storage.local.get(settings).then((result) => {
+        settings.forEach(setting => {
+            const value = result[setting];
+            if (value) {
+                document.querySelector(`select[name='${setting}']`).value = value;
+            }
+        });
+    });
+}

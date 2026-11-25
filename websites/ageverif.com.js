@@ -10,17 +10,29 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 console.log("ageverif.com bypass script is running");
 browser.webRequest.onBeforeRequest.addListener(
-    function (details) {
-        console.log("Request intercepted:", details.url);
+  function (details) {
+    console.log("Request intercepted:", details.url);
 
-        const filter = browser.webRequest.filterResponseData(details.requestId);
+    const filter = browser.webRequest.filterResponseData(details.requestId);
 
-        let decoder = new TextDecoder("utf-8");
-        let encoder = new TextEncoder();
+    let decoder = new TextDecoder("utf-8");
+    let encoder = new TextEncoder();
 
-        filter.onstop = async () => {
-            // Replace the original age verif popup with this one
-            const modifiedResponse = encoder.encode(`(function () {
+    let response = '';
+    filter.ondata = event => {
+      response += decoder.decode(event.data, { stream: true });
+    };
+
+    filter.onstop = async () => {
+      const ageverifSetting = await browser.storage.local.get('ageverif').then((result) => result['ageverif']);
+      setMostRecentSite("ageverif", details.tabId)
+      if (ageverifSetting == "off") {
+        filter.write(encoder.encode(response)); // Send back original response
+        filter.close()
+      }
+      else {
+        // Replace the original age verif popup with this one
+        const modifiedResponse = encoder.encode(`(function () {
 
   function parseQuery(url) {
     const params = {};
@@ -199,11 +211,12 @@ browser.webRequest.onBeforeRequest.addListener(
     ageverif.start();
   }
 })();`);
-            filter.write(modifiedResponse);
-            filter.close()
-        }
+        filter.write(modifiedResponse);
+        filter.close()
+      }
+    }
 
-    },
-    { urls: ["https://www.ageverif.com/checker.js?*"]},
-    ["blocking"]
+  },
+  { urls: ["https://www.ageverif.com/checker.js?*"] },
+  ["blocking"]
 );

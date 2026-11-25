@@ -9,9 +9,19 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 */
 console.log("Discord bypass script is running");
 
+loadableContentScripts.push({
+    id: "discord-contentScript",
+    js: ["libraries/pako.umd.min.js","websites/discord.com/websocket.js"],
+    matches: ["https://discord.com/*"],
+    runAt: "document_start",
+    world: "MAIN",
+    allFrames: true
+});
+
 browser.webRequest.onBeforeSendHeaders.addListener(
     async function (details) {
-        let discordSetting = await browser.storage.local.get('discordSetting').then((result) => result['discordSetting']);
+        setMostRecentSite("discord", details.tabId)
+        let discordSetting = await browser.storage.local.get('discord').then((result) => result['discord']);
 
         if(((details.url === "https://discord.com/api/v9/quests/@me") && discordSetting === "questFix") || discordSetting === "off") return console.log("Bypassed version spoof as per user preference"); // Skip checking for quests
         

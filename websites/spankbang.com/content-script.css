@@ -1,0 +1,8 @@
+#safety-blur, div[data-testid='video-item']>a>picture>div{
+    display:none !important;
+}
+
+.strong-blur {
+    filter: none !important;
+}
+  

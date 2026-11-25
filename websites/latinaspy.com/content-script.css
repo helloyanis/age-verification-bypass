@@ -1,0 +1,8 @@
+[data-attribute-type="content-overlay"]{
+    display: none !important
+}
+
+* {
+    filter: none !important;
+    backdrop-filter: none !important
+}

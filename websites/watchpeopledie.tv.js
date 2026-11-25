@@ -11,8 +11,16 @@ console.log("watchpeopledie.tv bypass script running")
 // Age assurance config request (the one that completely blocks the site)
 browser.webRequest.onBeforeRequest.addListener(
     async function (details) {
-        return {
-            cancel: true
+        console.log("Request intercepted:", details.url);
+        setMostRecentSite("watchpeopledie", details.tabId)
+        const watchpeopledieSetting = await browser.storage.local.get('watchpeopledie').then((result) => result['watchpeopledie']);
+        if (watchpeopledieSetting == "off") {
+            return
+        }
+        else {
+            return {
+                cancel: true
+            }
         }
     },
     { urls: ["*://watchpeopledie.tv/assets/js/uk_age_gate.js?*", "*://watchpeopledie.tv/assets/css/uk_age_gate.css?*"] },

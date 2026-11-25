@@ -11,17 +11,34 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
 
 console.log("agechecker.net bypass script is running");
 browser.webRequest.onBeforeRequest.addListener(
-    function (details) {
-        console.log("Request intercepted:", details.url);
+  function (details) {
+    console.log("Request intercepted:", details.url);
 
-        const filter = browser.webRequest.filterResponseData(details.requestId);
+    const filter = browser.webRequest.filterResponseData(details.requestId);
 
-        let decoder = new TextDecoder("utf-8");
-        let encoder = new TextEncoder();
+    let decoder = new TextDecoder("utf-8");
+    let encoder = new TextEncoder();
 
-        filter.onstop = async () => {
-            // Replace the original age verif popup with this one
-            const modifiedResponse = encoder.encode(`(function (w) {
+    let response = '';
+    filter.ondata = event => {
+        response += decoder.decode(event.data, { stream: true });
+    };
+
+    filter.onstop = async () => {
+      browser.storage.local.get('agechecker').then((result) => {
+        const agecheckerSetting = result['agechecker'];
+          // Save the most recently loaded site, to help with opening the popup page at the right site.
+          browser.storage.local.set({ ["mostRecentSite"]: "agechecker" });
+          // Also set the badge to "OK"
+          agecheckerSetting === "off" ? browser.action.setBadgeText({ text: "OFF", tabId: details.tabId }) : browser.action.setBadgeText({ text: "OK", tabId: details.tabId });
+      
+        if (agecheckerSetting == "off"){
+          filter.write(encoder.encode(response)); // Send back original response
+          filter.close()
+        }
+        else {
+          // Replace the original age verif popup with this one
+          const modifiedResponse = encoder.encode(`(function (w) {
   const config = w.AgeCheckerConfig || {};
 
   function complete() {
@@ -66,33 +83,53 @@ browser.webRequest.onBeforeRequest.addListener(
     complete();
   }
 })(window);`);
-            filter.write(modifiedResponse);
-            filter.close()
+          filter.write(modifiedResponse);
+          filter.close()
         }
+      })
+      }
 
     },
-    { urls: ["https://cdn.agechecker.net/static/popup/v1/popup.js"]},
-    ["blocking"]
+      { urls: ["https://cdn.agechecker.net/static/popup/v1/popup.js"] },
+      ["blocking"]
 );
 
 browser.webRequest.onBeforeRequest.addListener(
-    function (details) {
-        console.log("Request intercepted:", details.url);
+  function (details) {
+    console.log("Request intercepted:", details.url);
 
-        const filter = browser.webRequest.filterResponseData(details.requestId);
+    const filter = browser.webRequest.filterResponseData(details.requestId);
 
-        let decoder = new TextDecoder("utf-8");
-        let encoder = new TextEncoder();
+    let decoder = new TextDecoder("utf-8");
+    let encoder = new TextEncoder();
 
-        filter.onstop = async () => {
-            // Creation of user in agechecker API, respond with "accepted"
-            // https://agechecker.net/account/install/custom/server
-            const modifiedResponse = encoder.encode(`{"uuid": "${crypto.randomUUID()}", "status": "accepted"}`);
-            filter.write(modifiedResponse);
+    let response = '';
+    filter.ondata = event => {
+        response += decoder.decode(event.data, { stream: true });
+    };
+
+    filter.onstop = async () => {
+      browser.storage.local.get('agechecker').then((result) => {
+        const agecheckerSetting = result['agechecker'];
+          // Save the most recently loaded site, to help with opening the popup page at the right site.
+          browser.storage.local.set({ ["mostRecentSite"]: "agechecker" });
+          // Also set the badge to "OK"
+          agecheckerSetting === "off" ? browser.action.setBadgeText({ text: "OFF", tabId: details.tabId }) : browser.action.setBadgeText({ text: "OK", tabId: details.tabId });
+          if(agecheckerSetting === "off") {
+            filter.write(encoder.encode(response)); // Send back original response
             filter.close()
-        }
+          } else {
+          // Creation of user in agechecker API, respond with "accepted"
+          // https://agechecker.net/account/install/custom/server
+          const modifiedResponse = encoder.encode(`{"uuid": "${crypto.randomUUID()}", "status": "accepted"}`);
+          filter.write(modifiedResponse);
+          filter.close()
+          }
 
-    },
-    { urls: ["https://api.agechecker.net/v1/create", "https://sa.agechecker.net/ac_create"]},
-    ["blocking"]
+      })
+    }
+
+  },
+  { urls: ["https://api.agechecker.net/v1/create", "https://sa.agechecker.net/ac_create"] },
+  ["blocking"]
 );

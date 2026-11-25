@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Age verification bypass",
-    "version": "1.3.26",
+    "version": "1.4.0",
     "description": "Skips the age verification screens on various platforms!",
     "author": "🦊 helloyanis",
     "developer": {
@@ -40,37 +40,26 @@
             "websites/agego.com.js",
             "websites/ageverif.com.js",
             "websites/ageverification.org.js",
-            "websites/aliexpress.com.js",
-            "websites/angelogodshackxxx.com.js",
+            "websites/aliexpress.com/aliexpress.com.js",
+            "websites/angelogodshackxxx.com/angelogodshackxxx.com.js",
             "websites/bsky.app.js",
             "websites/cosxplay.com.js",
-            "websites/discord/discord.com.background.js",
-            "websites/erome.com.js",
-            "websites/freshnewfaces.club.js",
-            "websites/latinaspy.com.js",
+            "websites/discord.com/discord.com.background.js",
+            "websites/erome.com/erome.com.js",
+            "websites/freshnewfaces.club/freshnewfaces.club.js",
+            "websites/latinaspy.com/latinaspy.com.js",
             "websites/mewe.com.js",
-            "websites/pimpbunny.com.js",
-            "websites/reddit.com.js",
+            "websites/pimpbunny.com/pimpbunny.com.js",
+            "websites/reddit.com/reddit.com.js",
             "websites/redgifs.com.js",
             "websites/rule34.xxx.js",
-            "websites/spankbang.com.js",
+            "websites/spankbang.com/spankbang.com.js",
             "websites/veriff.me.js",
             "websites/watchpeopledie.tv.js",
             "websites/x.com.js",
             "websites/xhamster.com.js"
         ]
     },
-    "content_scripts": [
-        {
-        "matches": ["https://discord.com/*"],
-        "js": [
-            "libraries/pako.umd.min.js",
-            "websites/discord/websocket.js"
-        ],
-        "run_at": "document_start",
-        "world": "MAIN"
-        }
-    ],
     "action": {
         "default_icon": "icon.svg",
         "default_title": "Age verification bypass",

@@ -63,8 +63,8 @@ browser.webRequest.onBeforeRequest.addListener(
         };
 
         filter.onstop = async () => {
-            browser.storage.local.get('twitterSetting').then((result) => {
-                const twitterSetting = result['twitterSetting'];
+            browser.storage.local.get('twitter').then((result) => {
+                const twitterSetting = result['twitter'];
                 if (twitterSetting &&
                     twitterSetting.includes("home") && details.url.includes("HomeTimeline") ||
                     twitterSetting.includes("following") && details.url.includes("HomeLatestTimeline") ||

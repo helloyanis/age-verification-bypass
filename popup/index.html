@@ -32,59 +32,229 @@ THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR I
             <label for="bypassNotificationCheckbox">Show notification when a bypass is known for a site you visit
                 (recommended)</label>
         </div>
+
+        <label for="websiteSelect">Select a website :</label>
+        <select id="websiteSelect" name="websiteSelect">
+            <option value="agecheckerSetting">agechecker.net</option>
+            <option value="agegoSetting">agego.com</option>
+            <option value="ageverifSetting">ageverif.com</option>
+            <option value="ageverification.orgSetting">ageverification.org</option>
+            <option value="aliexpressSetting">AliExpress (aliexpress.com)</option>
+            <option value="angelogodshackxxxSetting">angelogodshackxxx.com</option>
+            <option value="bskySetting">Bluesky (bsky.app)</option>
+            <option value="cosxplaySetting">cosxplay.com</option>
+            <option value="discordSetting">Discord (discord.com)</option>
+            <option value="eromeSetting">erome.com</option>
+            <option value="freshnewfacesSetting">freshnewfaces.club</option>
+            <option value="latinaspySetting">latinaspy.com</option>
+            <option value="meweSetting">mewe.com</option>
+            <option value="pimpbunnySetting">pimpbunny.com</option>
+            <option value="redditSetting">Reddit (reddit.com)</option>
+            <option value="redgifsSetting">Redgifs (redgifs.com)</option>
+            <option value="spankbangSetting">Spankbang (spankbang.com)</option>
+            <option value="veriffSetting">Veriff (veriff.me)</option>
+            <option value="watchpeopledieSetting">WatchPeopleDie (watchpeopledie.tv)</option>
+            <option value="twitterSetting">X / Twitter (x.com)</option>
+        </select>
+
         <div class="surface settings">
-            <div class="setting" id="blueskySetting">
-            <label for="blueskyBehaviorSelect">Bluesky behavior:</label>
-            <select id="blueskyBehaviorSelect" name="bskySetting" settingChange>
-                <option value="media">Show text, hide media (Default)</option>
-                <option value="none">Show everything</option>
-                <option value="content">Hide everything</option>
-            </select>
-            <p>❗ Need to clear browsing data or use a new private browsing window for this change to take effect</p>
+            <div class="setting active" id="agecheckerSetting">
+                <label for="agecheckerBehaviorSelect">Agechecker.net behavior:</label>
+                <select id="agecheckerBehaviorSelect" name="agechecker" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
             </div>
-            
+
+            <div class="setting" id="agegoSetting">
+                <label for="agegoBehaviorSelect">Agego.com behavior:</label>
+                <select id="agegoBehaviorSelect" name="agego" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+                <div class="surface important">This will attempt to redirect you to the URL you would go to after you verified. If the site does server-side checks, it will not work.</div>
+            </div>
+
+            <div class="setting" id="ageverifSetting">
+                <label for="ageverifBehaviorSelect">Ageverif.com behavior:</label>
+                <select id="ageverifBehaviorSelect" name="ageverif" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="ageverification.orgSetting">
+                <label for="ageverification.orgBehaviorSelect">Ageverification.org behavior:</label>
+                <select id="ageverification.orgBehaviorSelect" name="ageverification.org" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="aliexpressSetting">
+                <label for="aliexpressBehaviorSelect">AliExpress behavior:</label>
+                <select id="aliexpressBehaviorSelect" name="aliexpress" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+                <div class="surface important">If the cart fails to checkout because it contains an age restricted item, click on "Buy now" on the product page. If clicking on a search result leads to a "Not found" product, open the page on a PC (as this error should only happen on mobile)</div>
+            </div>
+
+            <div class="setting" id="angelogodshackxxxSetting">
+                <label for="angelogodshackxxxBehaviorSelect">Angelogodshackxxx behavior:</label>
+                <select id="angelogodshackxxxBehaviorSelect" name="angelogodshackxxx" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="bskySetting">
+                <label for="bskyBehaviorSelect">Bluesky behavior:</label>
+                <select id="bskyBehaviorSelect" name="bsky" settingChange>
+                    <option value="media">Show text, hide media (Default)</option>
+                    <option value="none">Show everything</option>
+                    <option value="content">Hide everything</option>
+                    <option value="off">Disable bypass</option>
+                </select>
+                <div class="surface important">Need to clear browsing data or use a new private browsing window for this change to take effect</div>
+            </div>
+
+            <div class="setting" id="cosxplaySetting">
+                <label for="cosxplayBehaviorSelect">cosxplay.com behavior:</label>
+                <select id="cosxplayBehaviorSelect" name="cosxplay" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
             <div class="setting" id="discordSetting">
-            <label for="discordBehaviorSelect">Discord behavior:</label>
-            <select id="discordBehaviorSelect" name="discordSetting" settingChange>
-                <option value="fullVersionSpoof">Enable version spoofing, don't load quests (Default. Harder for Discord to detect this add-on's usage)</option>
-                <option value="questFix">Enable version spoofing, fix quests loading (⚠️ Easier for Discord to detect this add-on's usage)</option>
-                <option value="off">Disable version spoofing (Enable this if you are already verified on Discord)</option>
-            </select>
+                <label for="discordBehaviorSelect">Discord behavior:</label>
+                <select id="discordBehaviorSelect" name="discord" settingChange>
+                    <option value="fullVersionSpoof">Enable version spoofing, don't load quests (Default. Harder for
+                        Discord to detect this add-on's usage)</option>
+                    <option value="questFix">Enable version spoofing, fix quests loading (⚠️ Easier for Discord to
+                        detect this add-on's usage)</option>
+                    <option value="off">Disable bypass (Enable this if you are already verified on Discord)</option>
+                </select>
+                <div class="surface important">Discord has set up more restrictions in some regions, mainly the UK, Australia and Brazil. If you are hit with a "Messages failed to load" error in NSFW channels, use a VPN to go out of these countries!</div>
+            </div>
+
+            <div class="setting" id="eromeSetting">
+                <label for="eromeBehaviorSelect">Erome.com behavior:</label>
+                <select id="eromeBehaviorSelect" name="erome" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="freshnewfacesSetting">
+                <label for="freshnewfacesBehaviorSelect">Freshnewfaces.club behavior:</label>
+                <select id="freshnewfacesBehaviorSelect" name="freshnewfaces" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="latinaspySetting">
+                <label for="latinaspyBehaviorSelect">Latinaspy.com behavior:</label>
+                <select id="latinaspyBehaviorSelect" name="latinaspy" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="meweSetting">
+                <label for="meweBehaviorSelect">Mewe.com behavior:</label>
+                <select id="meweBehaviorSelect" name="mewe" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="pimpbunnySetting">
+                <label for="pimpbunnyBehaviorSelect">Pimpbunny.com behavior:</label>
+                <select id="pimpbunnyBehaviorSelect" name="pimpbunny" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
             </div>
 
             <div class="setting" id="redditSetting">
-            <label for="redditBehaviorSelect">Reddit behavior:</label>
-            <select id="redditBehaviorSelect" name="redditSetting" settingChange>
-                <option value="blur">Blur media (Default)</option>
-                <option value="unblur">Show everything</option>
-            </select>
+                <label for="redditBehaviorSelect">Reddit behavior:</label>
+                <select id="redditBehaviorSelect" name="reddit" settingChange>
+                    <option value="blur">Blur media (Default)</option>
+                    <option value="unblur">Show everything</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+                <div class="surface important">NSFW subreddits and posts can't be searched for even with the bypass on (need a link). If Reddit is still blocked, try to log out of your Reddit account.</div>
+            </div>
+
+            <div class="setting" id="redgifsSetting">
+                <label for="redgifsBehaviorSelect">Redgifs behavior:</label>
+                <select id="redgifsBehaviorSelect" name="redgifs" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="spankbangSetting">
+                <label for="spankbangBehaviorSelect">Spankbang behavior:</label>
+                <select id="spankbangBehaviorSelect" name="spankbang" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+            </div>
+
+            <div class="setting" id="veriffSetting">
+                <label for="veriffBehaviorSelect">Veriff behavior:</label>
+                <select id="veriffBehaviorSelect" name="veriff" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+                <div class="surface important">This will attempt to spoof Veriff's integration API. If the site uses the oAuth API or does server side checks, it won't work.</div>
+            </div>
+
+            <div class="setting" id="watchpeopledieSetting">
+                <label for="watchpeopledieBehaviorSelect">WatchPeopleDie behavior:</label>
+                <select id="watchpeopledieBehaviorSelect" name="watchpeopledie" settingChange>
+                    <option value="on">Bypass enabled</option>
+                    <option value="off">Bypass disabled</option>
+                </select>
+                <div class="surface important">Videos will not load. They require a verification token I can't spoof.</div>
             </div>
 
             <div class="setting" id="twitterSetting">
                 <label for="twitterBehaviorSelect">X / Twitter behavior :</label>
-                <div><button id="unblurAllTwitterOptions">🔞 Unblur all</button> <button id="blurAllTwitterOptions">🛡️ Blur all</button></div>
+                <div><button id="unblurAllTwitterOptions">🔞 Unblur all</button> <button id="blurAllTwitterOptions">🛡️
+                        Blur all</button></div>
                 <p>Manual setting : Select the options you want to unblur</p>
-                <select multiple id="twitterBehaviorSelect" name="twitterSetting" settingChange>
+                <span>❗ On PC, use CTRL + CLICK to select multiple options</span>
+                <select multiple id="twitterBehaviorSelect" name="twitter" settingChange>
                     <option value="home">Unblur home timeline</option>
                     <option value="following">Unblur following timeline</option>
                     <option value="search">Unblur search results</option>
                     <option value="bookmarks">Unblur bookmarks</option>
                     <option value="profile">Unblur tweets on profile pages</option>
                 </select>
-                <p>❗ On PC, use CTRL + CLICK to select multiple options</p>
+                <div class="surface important">This requires you to be logged in to a Twitter account. Twitter has recently pushed an update where some accounts use a different way to retrieve tweet data! My account or any of the ones I create have not yet been affected, so I can't make a fix for it. If you are logged in to an account and can't view nsfw posts, please <a href="mailto:age-verification-bypass@xn--3s8h30f.ws">send me an e-mail</a> or a DM on Discord!</div>
             </div>
         </div>
         <div class="surface">
             <p>Do you need any help? <a href="https://github.com/helloyanis/age-verification-bypass/wiki/Usage"
                     target="_blank">Read the docs</a>, <a href="https://discord.gg/zUq5de7bTU" target="_blank">join
                     Discord</a>, <a href="https://matrix.to/#/#age-verification-bypass:matrix.org" target="_blank">join
-                    Matrix</a>, or <a href="https://github.com/helloyanis/age-verification-bypass/issues"
-                    target="_blank">report an issue</a>.</p>
+                    Matrix</a>, <a href="mailto:age-verification-bypass@xn--3s8h30f.ws">Send me an e-mail</a>, or <a
+                    href="https://github.com/helloyanis/age-verification-bypass/issues" target="_blank">report an
+                    issue</a>.</p>
 
         </div>
     </div>
-    <p>Made by <a href="https://🦊💻.ws">🦊 helloyanis</a>, <a rel="me" href="https://furries.club/@helloyanis">follow me
-        on Mastodon</a>!</p>
+    <div class="footer">
+        <img class="profile" src="profile.svg">
+        <p>Made by <a href="https://🦊💻.ws">🦊 helloyanis</a>, <a rel="me"
+                href="https://furries.club/@helloyanis">follow me
+                on Mastodon</a>!</p>
+    </div>
     <script src="script.js"></script>
 </body>
 
