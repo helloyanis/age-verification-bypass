@@ -95,13 +95,18 @@ browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
 });
 
-function setMostRecentSite(site, tabId) {
+function setMostRecentSite(site, tabId, badgeText = null) {
     console.log("Setting most recent site", site, tabId)
     browser.storage.local.get(site).then((result) => {
         const setting = result[site];
         // Save the most recently loaded site, to help with opening the popup page at the right site.
         browser.storage.local.set({ ["mostRecentSite"]: site });
-        // Also set the badge to "OK"
-        setting === "off" ? browser.action.setBadgeText({ text: "OFF", tabId: tabId }) : browser.action.setBadgeText({ text: "OK", tabId: tabId });
+        if(badgeText) {
+            // If a badge text is provided, set it
+            browser.action.setBadgeText({ text: badgeText, tabId: tabId });
+        } else {
+            // If no badge text is provided, set the badge based on the setting
+            setting === "off" ? browser.action.setBadgeText({ text: "OFF", tabId: tabId }) : browser.action.setBadgeText({ text: "OK", tabId: tabId });
+        }
     })
 }

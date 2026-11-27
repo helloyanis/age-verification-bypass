@@ -19,6 +19,7 @@ loadableContentScripts.push({
 
 browser.webRequest.onBeforeRequest.addListener(
     (details) => {
+        if(details.tabId === -1) return; // Ignore requests not associated with a tab
         console.log("Request intercepted:", details.url);
         setMostRecentSite("pimpbunny", details.tabId)
     },
