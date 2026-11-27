@@ -72,10 +72,10 @@ browser.webRequest.onBeforeRequest.addListener(
             browser.storage.local.get('twitter').then((result) => {
                 const twitterSetting = result['twitter'];
                 if (twitterSetting &&
-                    twitterSetting.includes("home") && details.url.includes("HomeTimeline") || //DONE
-                    twitterSetting.includes("following") && details.url.includes("HomeLatestTimeline") || //DONE
+                    twitterSetting.includes("home") && details.url.includes("HomeTimeline") ||
+                    twitterSetting.includes("following") && details.url.includes("HomeLatestTimeline") ||
                     twitterSetting.includes("search") && (details.url.includes("SearchTimeline") || details.url.includes("SearchByRawQuery")) ||
-                    twitterSetting.includes("bookmarks") && (details.url.includes("Bookmarks") || details.url.includes("BookmarkTimeline")) || //DONE
+                    twitterSetting.includes("bookmarks") && (details.url.includes("Bookmarks") || details.url.includes("BookmarkTimeline") || details.url.includes("Likes") || details.url.includes("likesQuery")) ||
                     twitterSetting.includes("profile") && (details.url.includes("UserOriginalsTimeline") || details.url.includes("UserTweets") || details.url.includes("UserRepliesTimeline") || details.url.includes("UserRepostsTimeline")) ||
                     details.url.includes("TweetDetail") || details.url.includes("tweetMediaViewerQuery")
                 ) {
@@ -190,11 +190,15 @@ browser.webRequest.onBeforeRequest.addListener(
                                 });
                             }
                         });
+                        // Likes on API v2 of the twitter api
+                        jsonData?.data?.user_result_by_rest_id?.result?.favorites_by_time_timeline_v2?.timeline?.instructions?.forEach(instruction => {
+                            instruction = unblurInstructionEntriesV2(instruction, details.tabId);
+                        });
 
                         // Profile pages
                         // API v1 of the twitter api
                         jsonData?.data?.user?.result?.timeline?.timeline?.instructions?.forEach(instruction => {
-                            if (instruction?.type === "TimelineAddEntries") {
+                            if (instruction?.type === "TimelineAddEntries" || instruction?.__typename === "TimelineAddEntries") {
                                 instruction.entries?.forEach(entry => {
                                     // Basic posts
                                     if (entry.content?.itemContent?.tweet_results?.result) {
@@ -210,7 +214,7 @@ browser.webRequest.onBeforeRequest.addListener(
                                 });
                             }
 
-                            if (instruction?.type === "TimelinePinEntry") {
+                            if (instruction?.type === "TimelinePinEntry" || instruction?.__typename === "TimelinePinEntry") {
                                 // This one has a single entry instead of an array of entries
                                 const entry = instruction.entry;
                                 // Basic posts
@@ -264,7 +268,7 @@ browser.webRequest.onBeforeRequest.addListener(
         }
 
     },
-    { urls: ["https://x.com/i/api/graphql/*/TweetDetail?*", "https://api.x.com/graphql/*/TweetDetail?*", "https://x.com/i/api/graphql/*/SearchTimeline?*", "https://api.x.com/graphql/*/SearchByRawQuery?*", "https://x.com/i/api/graphql/*/HomeTimeline", "https://api.x.com/graphql/*/HomeTimeline", "https://x.com/i/api/graphql/*/HomeLatestTimeline", "https://api.x.com/graphql/*/HomeLatestTimelineQuery?*", "https://x.com/i/api/graphql/*/Bookmarks?*", "https://api.x.com/graphql/*/BookmarkTimeline?*", "https://x.com/i/api/graphql/*/UserOriginalsTimeline?*", "https://api.x.com/graphql/*/UserOriginalsTimeline?*", "https://api.x.com/graphql/*/UserTweets?*", "https://x.com/i/api/graphql/*/UserTweetsAndReplies?*", "https://api.x.com/graphql/*/UserTweets?*", "https://x.com/i/api/graphql/*/UserRepliesTimeline?*", "https://api.x.com/graphql/*/UserRepliesTimeline?*", "https://x.com/i/api/graphql/*/UserRepostsTimeline?*", "https://api.x.com/graphql/*/UserRepostsTimeline?*", "https://api.x.com/graphql/*/tweetMediaViewerQuery?*"] },
+    { urls: ["https://x.com/i/api/graphql/*/TweetDetail?*", "https://api.x.com/graphql/*/TweetDetail?*", "https://x.com/i/api/graphql/*/SearchTimeline?*", "https://api.x.com/graphql/*/SearchByRawQuery?*", "https://x.com/i/api/graphql/*/HomeTimeline", "https://api.x.com/graphql/*/HomeTimeline", "https://x.com/i/api/graphql/*/HomeLatestTimeline", "https://api.x.com/graphql/*/HomeLatestTimelineQuery?*", "https://x.com/i/api/graphql/*/Bookmarks?*", "https://api.x.com/graphql/*/BookmarkTimeline?*", "https://api.x.com/graphql/*/Likes?*", "https://api.x.com/graphql/*/likesQuery?*", "https://x.com/i/api/graphql/*/UserOriginalsTimeline?*", "https://api.x.com/graphql/*/UserOriginalsTimeline?*", "https://api.x.com/graphql/*/UserTweets?*", "https://x.com/i/api/graphql/*/UserTweetsAndReplies?*", "https://api.x.com/graphql/*/UserTweets?*", "https://x.com/i/api/graphql/*/UserRepliesTimeline?*", "https://api.x.com/graphql/*/UserRepliesTimeline?*", "https://x.com/i/api/graphql/*/UserRepostsTimeline?*", "https://api.x.com/graphql/*/UserRepostsTimeline?*", "https://api.x.com/graphql/*/tweetMediaViewerQuery?*"] },
     ["blocking"]
 );
 
@@ -287,6 +291,9 @@ function unblurTweet(tweet, tabId = null) {
     }
     if (tweet?.quotedRefResult?.result?.__typename === "TweetWithVisibilityResults") {
         tweet.quotedRefResult.result = unblurTweet(tweet.quotedRefResult.result, tabId);
+    }
+    if (tweet?.quoted_tweet_results?.result?.__typename === "TweetWithVisibilityResults") {
+        tweet.quoted_tweet_results.result = unblurTweet(tweet.quoted_tweet_results.result, tabId);
     }
     if (tweet?.nested_quoted_tweet_results?.result?.__typename === "TweetWithVisibilityResults") {
         tweet.nested_quoted_tweet_results.result = unblurTweet(tweet.nested_quoted_tweet_results.result, tabId);
