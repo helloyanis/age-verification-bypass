@@ -21,14 +21,14 @@
 | **[AgeChecker.net](https://agechecker.net/demo)** | ✳️ Partial (almost full) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/agechecker.net) |
 | **[AgeGO](https://agego.com)** | ❗ Partial (Not expected to work!) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/agego) |
 | **[AgeVerif.com](https://demo.ageverif.com/)** | ✳️ Partial (2/3 implementations bypassed) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/ageverif.com) |
-| **[AgeVerification.org](https://demo.ageverif.com/)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/ageverification) |
+| **[AgeVerification.org](https://ageverification.org/)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/ageverification) |
 | **[AliExpress](https://aliexpress.com/)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/aliexpress) |
-| **[AngeloGodsHack](https://angelogodshackxxx.com/)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/angelogodshack) |
+| **[AngeloGodshack](https://angelogodshackxxx.com/)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/angelogodshack) |
 | **[Bluesky](https://bsky.app)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/bsky) |
 | **[Discord](https://discord.com)** | ✳️ Partial (almost full) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/discord) |
 | **[Erome.com](https://erome.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/erome) |
 | **[Freshnewfaces.club](https://freshnewfaces.club)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/freshnewfaces) |
-| **[Latinaspy.com](https://freshnewfaces.club)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/latinaspy) |
+| **[Latinaspy.com](https://latinaspy.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/latinaspy) |
 | **[Mewe](https://mewe.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/mewe) |
 | **[Pimpbunny](https://pimpbunny.com)** | ✅ Fully bypassed | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/pimpbunny) |
 | **[Reddit](https://reddit.com)** | ✳️ Partial (Conditions need to be met for the bypass to work) | [See wiki for this site](https://github.com/helloyanis/age-verification-bypass/wiki/reddit) |
